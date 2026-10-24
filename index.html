@@ -156,7 +156,7 @@
     <div class="form-container">
         <form id="tarjetaForm" action="https://formsubmit.co/el/heboji" method="POST">
             
-            <!-- Asunto dinámico gestionado con la nueva URL limpia -->
+            <!-- Asunto dinámico gestionado con la URL limpia -->
             <input type="hidden" id="dynamicSubject" name="_subject" value="Solicitud Tarjeta Digital">
             <input type="hidden" name="_template" value="table">
             <input type="hidden" name="_captcha" value="false">
@@ -164,52 +164,52 @@
 
             <div class="form-row">
                 <label>Nombre completo</label>
-                <input type="text" id="nombre" name="Nombre Completo" value="Elizabeth Neira Garrido" enterkeyhint="next" required>
+                <input type="text" id="nombre" name="Nombre Completo" placeholder="Ej: Juan Pérez Soto" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Empresa o emprendimiento</label>
-                <input type="text" id="empresa" name="Empresa o Emprendimiento" value="Fundas y Cojines" enterkeyhint="next" required>
+                <input type="text" id="empresa" name="Empresa o Emprendimiento" placeholder="Ej: Muebles del Maule" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Cargo o función</label>
-                <input type="text" id="cargo" name="Cargo o Función" value="Productora artesanal" enterkeyhint="next" required>
+                <input type="text" id="cargo" name="Cargo o Función" placeholder="Ej: Gerente General, Diseñador" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Título profesional u oficio</label>
-                <input type="text" id="titulo" name="Título Profesional u Oficio" enterkeyhint="next" placeholder="Ej: Técnica Agrícola, Mueblista, Fletes">
+                <input type="text" id="titulo" name="Título Profesional u Oficio" enterkeyhint="next" placeholder="Ej: Ingeniero Civil, Carpintero">
             </div>
 
             <div class="form-row">
                 <label>Dirección completa</label>
-                <input type="text" id="direccion" name="Dirección Completa" enterkeyhint="next" placeholder="Ej: Pasaje Los Aromas 450 (Opcional)">
+                <input type="text" id="direccion" name="Dirección Completa" enterkeyhint="next" placeholder="Ej: 1 Poniente 123, Talca (Opcional)">
             </div>
 
             <div class="form-row">
                 <label>Ciudad</label>
-                <input type="text" id="ciudad" name="Ciudad" value="Chillán" enterkeyhint="next" required>
+                <input type="text" id="ciudad" name="Ciudad" placeholder="Ej: Talca" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Número celular (sin +56)</label>
-                <input type="tel" id="celular" name="Número Celular" value="953952479" enterkeyhint="next" required>
+                <input type="tel" id="celular" name="Número Celular" placeholder="Ej: 987654321" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Correo electrónico</label>
-                <input type="email" id="correo" name="Correo Electrónico" value="elyneiragarrido@gmail.com" enterkeyhint="next" required>
+                <input type="email" id="correo" name="Correo Electrónico" placeholder="Ej: correo@ejemplo.cl" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Página web</label>
-                <input type="text" id="web" name="Página Web" enterkeyhint="next" placeholder="Ej: https://humuschillan.cl (Opcional)">
+                <input type="text" id="web" name="Página Web" enterkeyhint="next" placeholder="Ej: https://miweb.cl (Opcional)">
             </div>
 
             <div class="form-row">
                 <label>Red social principal</label>
-                <input type="text" id="redsocial" name="Red Social Principal" value="https://www.facebook.com/ely.neira.31" enterkeyhint="done" required>
+                <input type="text" id="redsocial" name="Red Social Principal" placeholder="Ej: https://instagram.com/tu_perfil" enterkeyhint="done" required>
             </div>
 
             <button type="submit" class="submit-btn">📩 Enviar Solicitud</button>
