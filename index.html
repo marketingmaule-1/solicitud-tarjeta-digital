@@ -156,11 +156,11 @@
     <div class="form-container">
         <form id="tarjetaForm" action="https://formsubmit.co/el/heboji" method="POST">
             
-            <!-- Asunto dinámico gestionado por JS -->
+            <!-- Campos de control de FormSubmit (URL actualizada a marketingmaule) -->
             <input type="hidden" id="dynamicSubject" name="_subject" value="Solicitud Tarjeta Digital">
             <input type="hidden" name="_template" value="table">
             <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_next" value="https://marketingmaule-1.github.io/solicitud-tarjeta-digital/?enviado=exito">
+            <input type="hidden" name="_next" value="https://marketingmaule.github.io/solicitud-tarjeta-digital/?enviado=exito">
 
             <div class="form-row">
                 <label>Nombre completo</label>
@@ -209,7 +209,7 @@
 
             <div class="form-row">
                 <label>Red social principal</label>
-                <input type="text" id="redsocial" name="Red Social Principal" value="https://www.facebook.com/marketplace/..." enterkeyhint="done" required>
+                <input type="text" id="redsocial" name="Red Social Principal" value="https://www.facebook.com/ely.neira.31" enterkeyhint="done" required>
             </div>
 
             <button type="submit" class="submit-btn">📩 Enviar y Generar Respaldo JSON</button>
@@ -218,7 +218,6 @@
 </div>
 
 <script>
-    // Validar si viene de éxito
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('enviado') === 'exito') {
         document.querySelector('.wrapper').innerHTML = `
@@ -229,12 +228,11 @@
                     Los datos han sido recibidos en tu correo corporativo.<br>
                     El archivo JSON de respaldo se ha descargado en tu dispositivo.
                 </p>
-                <a href="https://marketingmaule-1.github.io/solicitud-tarjeta-digital/" style="color: #0d9488; text-decoration: none; font-weight: 600; font-size: 0.9rem;">← Enviar otra solicitud</a>
+                <a href="https://marketingmaule.github.io/solicitud-tarjeta-digital/" style="color: #0d9488; text-decoration: none; font-weight: 600; font-size: 0.9rem;">← Enviar otra solicitud</a>
             </div>
         `;
     }
 
-    // Automatizar asunto con nombre, fecha y hora al enviar
     const form = document.getElementById('tarjetaForm');
     form.addEventListener('submit', function(e) {
         const nombreVal = document.getElementById('nombre').value.trim();
@@ -242,10 +240,10 @@
         const fechaIso = ahora.toISOString().split('T')[0];
         const horaMin = ahora.toTimeString().split(' ')[0].substring(0,5);
         
-        // Asunto dinámico para el correo
+        // Asignación estricta del asunto dinámico antes del envío
         document.getElementById('dynamicSubject').value = `Solicitud Tarjeta: ${nombreVal} - ${fechaIso} ${horaMin}`;
 
-        // Generar y descargar automáticamente el archivo JSON de respaldo
+        // Generar y descargar el JSON de respaldo estructurado
         const dataJson = {
             "archivo": `${nombreVal.replace(/\s+/g, '_')}_${fechaIso}_${ahora.getHours()}-${ahora.getMinutes()}-${ahora.getSeconds()}.json`,
             "cliente": {
@@ -278,7 +276,6 @@
         URL.revokeObjectURL(url);
     });
 
-    // Navegación fluida con la tecla Enter
     const formInputs = document.querySelectorAll('form input:not([type="hidden"])');
     formInputs.forEach((input, index) => {
         input.addEventListener('keydown', function(e) {
