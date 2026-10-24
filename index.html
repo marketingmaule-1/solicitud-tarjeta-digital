@@ -156,13 +156,13 @@
     <div class="form-container">
         <form id="tarjetaForm" action="https://formsubmit.co/el/heboji" method="POST">
             
-            <!-- Configuración FormSubmit -->
+            <!-- Configuración FormSubmit con redirección correcta -->
             <input type="hidden" id="dynamicSubject" name="_subject" value="Solicitud Tarjeta Digital">
             <input type="hidden" name="_template" value="table">
             <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_next" value="https://marketingmaule.github.io/solicitud-tarjeta-digital/?enviado=exito">
 
-            <!-- Campos ocultos donde se inyectará el código generado para tu correo -->
+            <!-- Campos ocultos para inyectar el código automatizado a tu correo -->
             <input type="hidden" id="vcfGenerated" name="CODIGO_VCF_PARA_GITHUB" value="">
             <input type="hidden" id="htmlGenerated" name="CODIGO_INDEX_HTML_PARA_GITHUB" value="">
 
@@ -222,6 +222,7 @@
 </div>
 
 <script>
+    // Pantalla de éxito con enlace de retorno correcto
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('enviado') === 'exito') {
         document.querySelector('.wrapper').innerHTML = `
