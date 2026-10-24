@@ -147,20 +147,19 @@
 </head>
 <body>
 
-<div class="wrapper">
+<div class="wrapper" id="appWrapper">
     <div class="app-header">
         <div class="app-title">✨ Tu Tarjeta de Presentación Digital</div>
         <div class="app-subtitle">Ingresa tus datos para elaborar tu tarjeta</div>
     </div>
 
     <div class="form-container">
-        <form id="tarjetaForm" action="https://formsubmit.co/el/heboji" method="POST">
+        <!-- Sin _next para evitar redirecciones raras: se envía por AJAX limpiamente -->
+        <form id="tarjetaForm">
             
-            <!-- Configuración FormSubmit con redirección correcta -->
             <input type="hidden" id="dynamicSubject" name="_subject" value="Solicitud Tarjeta Digital">
             <input type="hidden" name="_template" value="table">
             <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_next" value="https://marketingmaule.github.io/solicitud-tarjeta-digital/?enviado=exito">
 
             <!-- Campos ocultos para inyectar el código automatizado a tu correo -->
             <input type="hidden" id="vcfGenerated" name="CODIGO_VCF_PARA_GITHUB" value="">
@@ -216,30 +215,20 @@
                 <input type="text" id="redsocial" name="Red Social Principal" placeholder="Ej: https://www.facebook.com/ely.neira.31" enterkeyhint="done" required>
             </div>
 
-            <button type="submit" class="submit-btn">📩 Enviar Solicitud</button>
+            <button type="submit" id="submitBtn" class="submit-btn">📩 Enviar Solicitud</button>
         </form>
     </div>
 </div>
 
 <script>
-    // Pantalla de éxito con enlace de retorno correcto
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('enviado') === 'exito') {
-        document.querySelector('.wrapper').innerHTML = `
-            <div style="padding: 40px 20px; text-align: center;">
-                <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
-                <h2 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 8px;">¡Solicitud enviada con éxito!</h2>
-                <p style="color: #64748b; font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;">
-                    Tus datos han sido enviados correctamente a Marketing Maule.<br>
-                    Nos pondremos en contacto contigo a la brevedad.
-                </p>
-                <a href="https://marketingmaule.github.io/solicitud-tarjeta-digital/" style="color: #0d9488; text-decoration: none; font-weight: 600; font-size: 0.9rem;">← Enviar otra solicitud</a>
-            </div>
-        `;
-    }
-
     const form = document.getElementById('tarjetaForm');
     form.addEventListener('submit', function(e) {
+        e.preventDefault(); // Evita recargas y redirecciones externas
+
+        const btn = document.getElementById('submitBtn');
+        btn.textContent = "Enviando solicitud...";
+        btn.disabled = true;
+
         const nombreVal = document.getElementById('nombre').value.trim();
         const empresaVal = document.getElementById('empresa').value.trim();
         const cargoVal = document.getElementById('cargo').value.trim();
@@ -253,7 +242,7 @@
         const fechaIso = ahora.toISOString().split('T')[0];
         const horaMin = ahora.toTimeString().split(' ')[0].substring(0,5);
         
-        // 1. Asunto dinámico para tu Gmail
+        // 1. Asunto dinámico
         document.getElementById('dynamicSubject').value = `Solicitud Tarjeta: ${nombreVal} - ${fechaIso} ${horaMin}`;
 
         // 2. Generación automática del código VCF
@@ -271,7 +260,7 @@ END:VCARD`;
 
         document.getElementById('vcfGenerated').value = vcfContent;
 
-        // 3. Generación automática del código index.html de la tarjeta final del cliente
+        // 3. Generación automática del código index.html
         const htmlContent = 
 `<!DOCTYPE html>
 <html lang="es">
@@ -292,6 +281,37 @@ END:VCARD`;
 </html>`;
 
         document.getElementById('htmlGenerated').value = htmlContent;
+
+        // Enviar datos por fetch a FormSubmit de forma invisible
+        const formData = new FormData(form);
+        
+        fetch("https://formsubmit.co/ajax/marketingmaule@gmail.com", {
+            method: "POST",
+            body: formData,
+            headers: { 
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Mostrar pantalla de éxito limpia en la misma página
+            document.getElementById('appWrapper').innerHTML = `
+                <div style="padding: 40px 20px; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
+                    <h2 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 8px;">¡Solicitud enviada con éxito!</h2>
+                    <p style="color: #64748b; font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;">
+                        Tus datos han sido enviados correctamente a Marketing Maule.<br>
+                        Revisa tu bandeja de correo: los códigos VCF e index.html ya están listos.
+                    </p>
+                    <a href="https://marketingmaule.github.io/solicitud-tarjeta-digital/" style="color: #0d9488; text-decoration: none; font-weight: 600; font-size: 0.9rem;">← Enviar otra solicitud</a>
+                </div>
+            `;
+        })
+        .catch(error => {
+            alert("Hubo un error al enviar. Por favor intenta nuevamente.");
+            btn.textContent = "📩 Enviar Solicitud";
+            btn.disabled = false;
+        });
     });
 
     const formInputs = document.querySelectorAll('form input:not([type="hidden"])');
@@ -302,7 +322,7 @@ END:VCARD`;
                 if (index < formInputs.length - 1) {
                     formInputs[index + 1].focus();
                 } else {
-                    document.querySelector('button[type="submit"]').click();
+                    document.getElementById('submitBtn').click();
                 }
             }
         });
