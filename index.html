@@ -65,6 +65,19 @@
             margin-top: 3px;
         }
 
+        /* Etiqueta de versión para pruebas */
+        .version-badge {
+            display: inline-block;
+            background: #f1f5f9;
+            color: #0f766e;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-top: 6px;
+            border: 1px solid #e2e8f0;
+        }
+
         .form-container {
             padding: 14px 16px;
         }
@@ -151,10 +164,11 @@
     <div class="app-header">
         <div class="app-title">✨ Tu Tarjeta de Presentación Digital</div>
         <div class="app-subtitle">Ingresa tus datos para elaborar tu tarjeta</div>
+        <!-- Marca de versión dinámica que se actualiza al cargar -->
+        <div class="version-badge" id="versionTag">Versión: Criminando...</div>
     </div>
 
     <div class="form-container">
-        <!-- Sin _next para evitar redirecciones raras: se envía por AJAX limpiamente -->
         <form id="tarjetaForm">
             
             <input type="hidden" id="dynamicSubject" name="_subject" value="Solicitud Tarjeta Digital">
@@ -221,9 +235,15 @@
 </div>
 
 <script>
+    // Mostrar la fecha y hora exacta de compilación/carga en la interfaz
+    const ahoraInit = new Date();
+    const fechaStr = ahoraInit.toLocaleDateString('es-CL');
+    const horaStr = ahoraInit.toLocaleTimeString('es-CL');
+    document.getElementById('versionTag').textContent = `⚡ Versión en vivo: ${fechaStr} - ${horaStr}`;
+
     const form = document.getElementById('tarjetaForm');
     form.addEventListener('submit', function(e) {
-        e.preventDefault(); // Evita recargas y redirecciones externas
+        e.preventDefault();
 
         const btn = document.getElementById('submitBtn');
         btn.textContent = "Enviando solicitud...";
@@ -242,10 +262,10 @@
         const fechaIso = ahora.toISOString().split('T')[0];
         const horaMin = ahora.toTimeString().split(' ')[0].substring(0,5);
         
-        // 1. Asunto dinámico
+        // Asunto dinámico
         document.getElementById('dynamicSubject').value = `Solicitud Tarjeta: ${nombreVal} - ${fechaIso} ${horaMin}`;
 
-        // 2. Generación automática del código VCF
+        // Generación automática del código VCF
         const vcfContent = 
 `BEGIN:VCARD
 VERSION:3.0
@@ -260,7 +280,7 @@ END:VCARD`;
 
         document.getElementById('vcfGenerated').value = vcfContent;
 
-        // 3. Generación automática del código index.html
+        // Generación automática del código index.html
         const htmlContent = 
 `<!DOCTYPE html>
 <html lang="es">
@@ -282,7 +302,7 @@ END:VCARD`;
 
         document.getElementById('htmlGenerated').value = htmlContent;
 
-        // Enviar datos por fetch a FormSubmit de forma invisible
+        // Envío invisible vía AJAX a FormSubmit
         const formData = new FormData(form);
         
         fetch("https://formsubmit.co/ajax/marketingmaule@gmail.com", {
@@ -294,7 +314,6 @@ END:VCARD`;
         })
         .then(response => response.json())
         .then(data => {
-            // Mostrar pantalla de éxito limpia en la misma página
             document.getElementById('appWrapper').innerHTML = `
                 <div style="padding: 40px 20px; text-align: center;">
                     <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
