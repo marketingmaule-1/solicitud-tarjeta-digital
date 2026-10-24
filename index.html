@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitud de Tarjeta Digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --accent: #0d9488;
+            --accent-hover: #0f766e;
+            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            --card-bg: #ffffff;
+            --text: #334155;
+            --heading: #0f172a;
+            --muted: #64748b;
+            --border: #cbd5e1;
+            --input-bg: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 8px;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card-bg);
+            border-radius: 14px;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+            overflow: hidden;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+        }
+
+        .app-header {
+            background: #ffffff;
+            padding: 16px 14px 12px 14px;
+            text-align: center;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .app-title {
+            font-size: 1rem;
+            color: var(--heading);
+            font-weight: 700;
+        }
+
+        .app-subtitle {
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-top: 3px;
+        }
+
+        .form-container {
+            padding: 14px 16px;
+        }
+
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            margin-bottom: 8px;
+        }
+
+        @media (min-width: 480px) {
+            .form-row {
+                flex-direction: row;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 8px;
+            }
+            label {
+                width: 170px;
+                flex-shrink: 0;
+                text-align: right;
+            }
+        }
+
+        label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--heading);
+        }
+
+        input {
+            width: 100%;
+            flex: 1;
+            padding: 8px 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #1e3a8a;
+            font-weight: 700;
+            background: var(--input-bg);
+            transition: all 0.2s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
+        }
+
+        input::placeholder {
+            color: #94a3b8;
+            font-weight: 400;
+            font-size: 0.8rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 11px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 3px 10px rgba(13, 148, 136, 0.2);
+        }
+
+        .submit-btn:hover {
+            background: var(--accent-hover);
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="app-header">
+        <div class="app-title">✨ Tu Tarjeta de Presentación Digital</div>
+        <div class="app-subtitle">Ingresa tus datos para elaborar tu tarjeta</div>
+    </div>
+
+    <div class="form-container">
+        <!-- Envío directo a FormSubmit verificado para marketingmaule@gmail.com -->
+        <form action="https://formsubmit.co/el/heboji" method="POST">
+            
+            <input type="hidden" name="_subject" value="Nueva Solicitud de Tarjeta Digital">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_next" value="https://marketingmaule-1.github.io/solicitud-tarjeta-digital/?enviado=exito">
+
+            <div class="form-row">
+                <label>Nombre completo</label>
+                <input type="text" name="Nombre Completo" enterkeyhint="next" placeholder="Ej: Marlene Encina Vega" required>
+            </div>
+
+            <div class="form-row">
+                <label>Empresa o emprendimiento</label>
+                <input type="text" name="Empresa o Emprendimiento" enterkeyhint="next" placeholder="Ej: Venta Humus y Lombrices" required>
+            </div>
+
+            <div class="form-row">
+                <label>Cargo o función</label>
+                <input type="text" name="Cargo o Función" enterkeyhint="next" placeholder="Ej: Productora y Comercializadora" required>
+            </div>
+
+            <div class="form-row">
+                <label>Título profesional u oficio</label>
+                <input type="text" name="Título Profesional u Oficio" enterkeyhint="next" placeholder="Ej: Técnica Agrícola, Mueblista, Fletes">
+            </div>
+
+            <div class="form-row">
+                <label>Dirección completa</label>
+                <input type="text" name="Dirección Completa" enterkeyhint="next" placeholder="Ej: Pasaje Los Aromas 450 (Opcional)">
+            </div>
+
+            <div class="form-row">
+                <label>Ciudad</label>
+                <input type="text" name="Ciudad" enterkeyhint="next" placeholder="Ej: Chillán" required>
+            </div>
+
+            <div class="form-row">
+                <label>Número celular (sin +56)</label>
+                <input type="tel" name="Número Celular" enterkeyhint="next" placeholder="Ej: 995797206" required>
+            </div>
+
+            <div class="form-row">
+                <label>Correo electrónico</label>
+                <input type="email" name="Correo Electrónico" enterkeyhint="next" placeholder="Ej: marleneencina@hotmail.com" required>
+            </div>
+
+            <div class="form-row">
+                <label>Página web</label>
+                <input type="text" name="Página Web" enterkeyhint="next" placeholder="Ej: https://humuschillan.cl (Opcional)">
+            </div>
+
+            <div class="form-row">
+                <label>Red social principal</label>
+                <input type="text" name="Red Social Principal" enterkeyhint="done" placeholder="Ej: https://facebook.com/pagina" required>
+            </div>
+
+            <button type="submit" class="submit-btn">📩 Enviar para elaborar tarjeta</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('enviado') === 'exito') {
+        document.querySelector('.wrapper').innerHTML = `
+            <div style="padding: 40px 20px; text-align: center;">
+                <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
+                <h2 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 8px;">¡Información enviada con éxito!</h2>
+                <p style="color: #64748b; font-size: 0.9rem; line-height: 1.5;">
+                    Hemos recibido tus datos correctamente.<br>
+                    Nos pondremos en contacto contigo a la brevedad.
+                </p>
+            </div>
+        `;
+    }
+
+    const formInputs = document.querySelectorAll('form input');
+    formInputs.forEach((input, index) => {
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (index < formInputs.length - 1) {
+                    formInputs[index + 1].focus();
+                } else {
+                    document.querySelector('button[type="submit"]').click();
+                }
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
