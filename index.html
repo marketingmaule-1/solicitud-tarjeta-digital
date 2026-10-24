@@ -156,7 +156,7 @@
     <div class="form-container">
         <form id="tarjetaForm" action="https://formsubmit.co/el/heboji" method="POST">
             
-            <!-- Campos de control de FormSubmit (URL actualizada a marketingmaule) -->
+            <!-- Asunto dinámico gestionado con la nueva URL limpia -->
             <input type="hidden" id="dynamicSubject" name="_subject" value="Solicitud Tarjeta Digital">
             <input type="hidden" name="_template" value="table">
             <input type="hidden" name="_captcha" value="false">
@@ -212,27 +212,29 @@
                 <input type="text" id="redsocial" name="Red Social Principal" value="https://www.facebook.com/ely.neira.31" enterkeyhint="done" required>
             </div>
 
-            <button type="submit" class="submit-btn">📩 Enviar y Generar Respaldo JSON</button>
+            <button type="submit" class="submit-btn">📩 Enviar Solicitud</button>
         </form>
     </div>
 </div>
 
 <script>
+    // Pantalla de éxito limpia
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('enviado') === 'exito') {
         document.querySelector('.wrapper').innerHTML = `
             <div style="padding: 40px 20px; text-align: center;">
                 <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
-                <h2 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 8px;">¡Información enviada con éxito!</h2>
+                <h2 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 8px;">¡Solicitud enviada con éxito!</h2>
                 <p style="color: #64748b; font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;">
-                    Los datos han sido recibidos en tu correo corporativo.<br>
-                    El archivo JSON de respaldo se ha descargado en tu dispositivo.
+                    Tus datos han sido enviados correctamente a Marketing Maule.<br>
+                    Nos pondremos en contacto contigo a la brevedad.
                 </p>
                 <a href="https://marketingmaule.github.io/solicitud-tarjeta-digital/" style="color: #0d9488; text-decoration: none; font-weight: 600; font-size: 0.9rem;">← Enviar otra solicitud</a>
             </div>
         `;
     }
 
+    // Inyectar el asunto dinámico con fecha y hora exacta justo al enviar
     const form = document.getElementById('tarjetaForm');
     form.addEventListener('submit', function(e) {
         const nombreVal = document.getElementById('nombre').value.trim();
@@ -240,42 +242,11 @@
         const fechaIso = ahora.toISOString().split('T')[0];
         const horaMin = ahora.toTimeString().split(' ')[0].substring(0,5);
         
-        // Asignación estricta del asunto dinámico antes del envío
+        // Asunto limpio para tu bandeja de entrada en Gmail
         document.getElementById('dynamicSubject').value = `Solicitud Tarjeta: ${nombreVal} - ${fechaIso} ${horaMin}`;
-
-        // Generar y descargar el JSON de respaldo estructurado
-        const dataJson = {
-            "archivo": `${nombreVal.replace(/\s+/g, '_')}_${fechaIso}_${ahora.getHours()}-${ahora.getMinutes()}-${ahora.getSeconds()}.json`,
-            "cliente": {
-                "nombreCompleto": nombreVal,
-                "empresaEmprendimiento": document.getElementById('empresa').value.trim(),
-                "cargoFuncion": document.getElementById('cargo').value.trim(),
-                "tituloOficio": document.getElementById('titulo').value.trim(),
-                "direccion": document.getElementById('direccion').value.trim(),
-                "ciudad": document.getElementById('ciudad').value.trim(),
-                "celular": "+56" + document.getElementById('celular').value.trim(),
-                "correo": document.getElementById('correo').value.trim(),
-                "paginaWeb": document.getElementById('web').value.trim(),
-                "redSocial": document.getElementById('redsocial').value.trim()
-            },
-            "servicio": {
-                "vigenciaDesde": fechaIso,
-                "vigenciaHasta": new Date(new Date().setFullYear(ahora.getFullYear() + 2)).toISOString().split('T')[0],
-                "duracionAnos": 2
-            }
-        };
-
-        const blob = new Blob([JSON.stringify(dataJson, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = dataJson.archivo;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
     });
 
+    // Navegación fluida con la tecla Enter
     const formInputs = document.querySelectorAll('form input:not([type="hidden"])');
     formInputs.forEach((input, index) => {
         input.addEventListener('keydown', function(e) {
