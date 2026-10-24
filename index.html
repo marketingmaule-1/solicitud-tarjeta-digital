@@ -156,60 +156,64 @@
     <div class="form-container">
         <form id="tarjetaForm" action="https://formsubmit.co/el/heboji" method="POST">
             
-            <!-- Asunto dinámico gestionado con la URL limpia -->
+            <!-- Configuración FormSubmit -->
             <input type="hidden" id="dynamicSubject" name="_subject" value="Solicitud Tarjeta Digital">
             <input type="hidden" name="_template" value="table">
             <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_next" value="https://marketingmaule.github.io/solicitud-tarjeta-digital/?enviado=exito">
 
+            <!-- Campos ocultos donde se inyectará el código generado para tu correo -->
+            <input type="hidden" id="vcfGenerated" name="CODIGO_VCF_PARA_GITHUB" value="">
+            <input type="hidden" id="htmlGenerated" name="CODIGO_INDEX_HTML_PARA_GITHUB" value="">
+
             <div class="form-row">
                 <label>Nombre completo</label>
-                <input type="text" id="nombre" name="Nombre Completo" placeholder="Ej: Juan Pérez Soto" enterkeyhint="next" required>
+                <input type="text" id="nombre" name="Nombre Completo" placeholder="Ej: Elizabeth Neira Garrido" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Empresa o emprendimiento</label>
-                <input type="text" id="empresa" name="Empresa o Emprendimiento" placeholder="Ej: Muebles del Maule" enterkeyhint="next" required>
+                <input type="text" id="empresa" name="Empresa o Emprendimiento" placeholder="Ej: Fundas y Cojines" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Cargo o función</label>
-                <input type="text" id="cargo" name="Cargo o Función" placeholder="Ej: Gerente General, Diseñador" enterkeyhint="next" required>
+                <input type="text" id="cargo" name="Cargo o Función" placeholder="Ej: Productora artesanal" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Título profesional u oficio</label>
-                <input type="text" id="titulo" name="Título Profesional u Oficio" enterkeyhint="next" placeholder="Ej: Ingeniero Civil, Carpintero">
+                <input type="text" id="titulo" name="Título Profesional u Oficio" enterkeyhint="next" placeholder="Ej: Técnica Agrícola, Mueblista, Fletes">
             </div>
 
             <div class="form-row">
                 <label>Dirección completa</label>
-                <input type="text" id="direccion" name="Dirección Completa" enterkeyhint="next" placeholder="Ej: 1 Poniente 123, Talca (Opcional)">
+                <input type="text" id="direccion" name="Dirección Completa" enterkeyhint="next" placeholder="Ej: Pasaje Los Aromas 450 (Opcional)">
             </div>
 
             <div class="form-row">
                 <label>Ciudad</label>
-                <input type="text" id="ciudad" name="Ciudad" placeholder="Ej: Talca" enterkeyhint="next" required>
+                <input type="text" id="ciudad" name="Ciudad" placeholder="Ej: Chillán" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Número celular (sin +56)</label>
-                <input type="tel" id="celular" name="Número Celular" placeholder="Ej: 987654321" enterkeyhint="next" required>
+                <input type="tel" id="celular" name="Número Celular" placeholder="Ej: 953952479" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Correo electrónico</label>
-                <input type="email" id="correo" name="Correo Electrónico" placeholder="Ej: correo@ejemplo.cl" enterkeyhint="next" required>
+                <input type="email" id="correo" name="Correo Electrónico" placeholder="Ej: elyneiragarrido@gmail.com" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Página web</label>
-                <input type="text" id="web" name="Página Web" enterkeyhint="next" placeholder="Ej: https://miweb.cl (Opcional)">
+                <input type="text" id="web" name="Página Web" enterkeyhint="next" placeholder="Ej: https://humuschillan.cl (Opcional)">
             </div>
 
             <div class="form-row">
                 <label>Red social principal</label>
-                <input type="text" id="redsocial" name="Red Social Principal" placeholder="Ej: https://instagram.com/tu_perfil" enterkeyhint="done" required>
+                <input type="text" id="redsocial" name="Red Social Principal" placeholder="Ej: https://www.facebook.com/ely.neira.31" enterkeyhint="done" required>
             </div>
 
             <button type="submit" class="submit-btn">📩 Enviar Solicitud</button>
@@ -218,7 +222,6 @@
 </div>
 
 <script>
-    // Pantalla de éxito limpia
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('enviado') === 'exito') {
         document.querySelector('.wrapper').innerHTML = `
@@ -234,19 +237,62 @@
         `;
     }
 
-    // Inyectar el asunto dinámico con fecha y hora exacta justo al enviar
     const form = document.getElementById('tarjetaForm');
     form.addEventListener('submit', function(e) {
         const nombreVal = document.getElementById('nombre').value.trim();
+        const empresaVal = document.getElementById('empresa').value.trim();
+        const cargoVal = document.getElementById('cargo').value.trim();
+        const ciudadVal = document.getElementById('ciudad').value.trim();
+        const celularVal = document.getElementById('celular').value.trim();
+        const correoVal = document.getElementById('correo').value.trim();
+        const webVal = document.getElementById('web').value.trim();
+        const redsocialVal = document.getElementById('redsocial').value.trim();
+
         const ahora = new Date();
         const fechaIso = ahora.toISOString().split('T')[0];
         const horaMin = ahora.toTimeString().split(' ')[0].substring(0,5);
         
-        // Asunto limpio para tu bandeja de entrada en Gmail
+        // 1. Asunto dinámico para tu Gmail
         document.getElementById('dynamicSubject').value = `Solicitud Tarjeta: ${nombreVal} - ${fechaIso} ${horaMin}`;
+
+        // 2. Generación automática del código VCF
+        const vcfContent = 
+`BEGIN:VCARD
+VERSION:3.0
+FN:${nombreVal}
+ORG:${empresaVal}
+TITLE:${cargoVal}
+TEL;TYPE=CELL:+56${celularVal}
+EMAIL:${correoVal}
+ADR;TYPE=WORK:;;;${ciudadVal};;;Chile
+URL:${webVal || redsocialVal}
+END:VCARD`;
+
+        document.getElementById('vcfGenerated').value = vcfContent;
+
+        // 3. Generación automática del código index.html de la tarjeta final del cliente
+        const htmlContent = 
+`<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${nombreVal} - Tarjeta Digital</title>
+</head>
+<body>
+    <h1>${nombreVal}</h1>
+    <h2>${cargoVal} - ${empresaVal}</h2>
+    <p>📍 ${ciudadVal}, Chile</p>
+    <p>📞 <a href="tel:+56${celularVal}">+56 ${celularVal}</a></p>
+    <p>✉️ <a href="mailto:${correoVal}">${correoVal}</a></p>
+    <p>🌐 <a href="${redsocialVal}" target="_blank">Red Social / Web</a></p>
+    <a href="contacto.vcf" download>Guardar Contacto (VCF)</a>
+</body>
+</html>`;
+
+        document.getElementById('htmlGenerated').value = htmlContent;
     });
 
-    // Navegación fluida con la tecla Enter
     const formInputs = document.querySelectorAll('form input:not([type="hidden"])');
     formInputs.forEach((input, index) => {
         input.addEventListener('keydown', function(e) {
