@@ -154,85 +154,132 @@
     </div>
 
     <div class="form-container">
-        <!-- Apuntando directamente al correo corporativo para asegurar el reenvío limpio -->
-        <form action="https://formsubmit.co/marketingmaule@gmail.com" method="POST">
+        <form id="tarjetaForm" action="https://formsubmit.co/el/heboji" method="POST">
             
-            <input type="hidden" name="_subject" value="Nueva Solicitud de Tarjeta Digital - Marketing Maule">
+            <!-- Asunto dinámico gestionado por JS -->
+            <input type="hidden" id="dynamicSubject" name="_subject" value="Solicitud Tarjeta Digital">
             <input type="hidden" name="_template" value="table">
             <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_next" value="https://marketingmaule-1.github.io/solicitud-tarjeta-digital/?enviado=exito">
 
             <div class="form-row">
                 <label>Nombre completo</label>
-                <input type="text" name="Nombre Completo" value="Elizabeth Neira Garrido" enterkeyhint="next" required>
+                <input type="text" id="nombre" name="Nombre Completo" value="Elizabeth Neira Garrido" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Empresa o emprendimiento</label>
-                <input type="text" name="Empresa o Emprendimiento" value="Fundas y Cojines" enterkeyhint="next" required>
+                <input type="text" id="empresa" name="Empresa o Emprendimiento" value="Fundas y Cojines" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Cargo o función</label>
-                <input type="text" name="Cargo o Función" value="Productora artesanal" enterkeyhint="next" required>
+                <input type="text" id="cargo" name="Cargo o Función" value="Productora artesanal" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Título profesional u oficio</label>
-                <input type="text" name="Título Profesional u Oficio" enterkeyhint="next" placeholder="Ej: Técnica Agrícola, Mueblista, Fletes">
+                <input type="text" id="titulo" name="Título Profesional u Oficio" enterkeyhint="next" placeholder="Ej: Técnica Agrícola, Mueblista, Fletes">
             </div>
 
             <div class="form-row">
                 <label>Dirección completa</label>
-                <input type="text" name="Dirección Completa" enterkeyhint="next" placeholder="Ej: Pasaje Los Aromas 450 (Opcional)">
+                <input type="text" id="direccion" name="Dirección Completa" enterkeyhint="next" placeholder="Ej: Pasaje Los Aromas 450 (Opcional)">
             </div>
 
             <div class="form-row">
                 <label>Ciudad</label>
-                <input type="text" name="Ciudad" value="Chillán" enterkeyhint="next" required>
+                <input type="text" id="ciudad" name="Ciudad" value="Chillán" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Número celular (sin +56)</label>
-                <input type="tel" name="Número Celular" value="953952479" enterkeyhint="next" required>
+                <input type="tel" id="celular" name="Número Celular" value="953952479" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Correo electrónico</label>
-                <input type="email" name="Correo Electrónico" value="elyneiragarrido@gmail.com" enterkeyhint="next" required>
+                <input type="email" id="correo" name="Correo Electrónico" value="elyneiragarrido@gmail.com" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Página web</label>
-                <input type="text" name="Página Web" enterkeyhint="next" placeholder="Ej: https://humuschillan.cl (Opcional)">
+                <input type="text" id="web" name="Página Web" enterkeyhint="next" placeholder="Ej: https://humuschillan.cl (Opcional)">
             </div>
 
             <div class="form-row">
                 <label>Red social principal</label>
-                <input type="text" name="Red Social Principal" value="https://www.facebook.com/marketplace/..." enterkeyhint="done" required>
+                <input type="text" id="redsocial" name="Red Social Principal" value="https://www.facebook.com/marketplace/..." enterkeyhint="done" required>
             </div>
 
-            <button type="submit" class="submit-btn">📩 Enviar para elaborar tarjeta</button>
+            <button type="submit" class="submit-btn">📩 Enviar y Generar Respaldo JSON</button>
         </form>
     </div>
 </div>
 
 <script>
+    // Validar si viene de éxito
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('enviado') === 'exito') {
         document.querySelector('.wrapper').innerHTML = `
             <div style="padding: 40px 20px; text-align: center;">
                 <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
                 <h2 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 8px;">¡Información enviada con éxito!</h2>
-                <p style="color: #64748b; font-size: 0.9rem; line-height: 1.5;">
-                    Hemos recibido tus datos correctamente.<br>
-                    Nos pondremos en contacto contigo a la brevedad.
+                <p style="color: #64748b; font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;">
+                    Los datos han sido recibidos en tu correo corporativo.<br>
+                    El archivo JSON de respaldo se ha descargado en tu dispositivo.
                 </p>
+                <a href="https://marketingmaule-1.github.io/solicitud-tarjeta-digital/" style="color: #0d9488; text-decoration: none; font-weight: 600; font-size: 0.9rem;">← Enviar otra solicitud</a>
             </div>
         `;
     }
 
-    const formInputs = document.querySelectorAll('form input');
+    // Automatizar asunto con nombre, fecha y hora al enviar
+    const form = document.getElementById('tarjetaForm');
+    form.addEventListener('submit', function(e) {
+        const nombreVal = document.getElementById('nombre').value.trim();
+        const ahora = new Date();
+        const fechaIso = ahora.toISOString().split('T')[0];
+        const horaMin = ahora.toTimeString().split(' ')[0].substring(0,5);
+        
+        // Asunto dinámico para el correo
+        document.getElementById('dynamicSubject').value = `Solicitud Tarjeta: ${nombreVal} - ${fechaIso} ${horaMin}`;
+
+        // Generar y descargar automáticamente el archivo JSON de respaldo
+        const dataJson = {
+            "archivo": `${nombreVal.replace(/\s+/g, '_')}_${fechaIso}_${ahora.getHours()}-${ahora.getMinutes()}-${ahora.getSeconds()}.json`,
+            "cliente": {
+                "nombreCompleto": nombreVal,
+                "empresaEmprendimiento": document.getElementById('empresa').value.trim(),
+                "cargoFuncion": document.getElementById('cargo').value.trim(),
+                "tituloOficio": document.getElementById('titulo').value.trim(),
+                "direccion": document.getElementById('direccion').value.trim(),
+                "ciudad": document.getElementById('ciudad').value.trim(),
+                "celular": "+56" + document.getElementById('celular').value.trim(),
+                "correo": document.getElementById('correo').value.trim(),
+                "paginaWeb": document.getElementById('web').value.trim(),
+                "redSocial": document.getElementById('redsocial').value.trim()
+            },
+            "servicio": {
+                "vigenciaDesde": fechaIso,
+                "vigenciaHasta": new Date(new Date().setFullYear(ahora.getFullYear() + 2)).toISOString().split('T')[0],
+                "duracionAnos": 2
+            }
+        };
+
+        const blob = new Blob([JSON.stringify(dataJson, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = dataJson.archivo;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    });
+
+    // Navegación fluida con la tecla Enter
+    const formInputs = document.querySelectorAll('form input:not([type="hidden"])');
     formInputs.forEach((input, index) => {
         input.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
