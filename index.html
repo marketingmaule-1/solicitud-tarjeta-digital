@@ -121,6 +121,13 @@
             transition: all 0.2s ease;
         }
 
+        input[type="file"] {
+            padding: 4px;
+            font-size: 0.72rem;
+            color: var(--muted);
+            background: #f8fafc;
+        }
+
         input:focus, select:focus {
             outline: none;
             border-color: var(--accent);
@@ -147,37 +154,6 @@
         .pro-box.active {
             display: block;
         }
-
-        .email-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            justify-content: center;
-            margin-top: 4px;
-        }
-
-        .email-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            background: #1e3a8a;
-            color: white;
-            text-decoration: none;
-            font-size: 0.68rem;
-            font-weight: 600;
-            padding: 5px 8px;
-            border-radius: 5px;
-            transition: background 0.2s;
-        }
-
-        .email-btn:hover {
-            background: #1e40af;
-        }
-
-        .email-btn.gmail { background: #ea4335; }
-        .email-btn.outlook { background: #0078d4; }
-        .email-btn.native { background: #0d9488; }
 
         .submit-btn {
             width: 100%;
@@ -213,7 +189,8 @@
     </div>
 
     <div class="form-container">
-        <form id="tarjetaForm">
+        <!-- Importante: enctype="multipart/form-data" es necesario para que FormSubmit reciba archivos -->
+        <form id="tarjetaForm" enctype="multipart/form-data">
             
             <input type="hidden" id="dynamicSubject" name="_subject" value="Solicitud Tarjeta Digital">
             <input type="hidden" name="_template" value="table">
@@ -234,7 +211,7 @@
 
             <div class="form-row">
                 <label>Nombre completo</label>
-                <input type="text" id="nombre" name="Nombre Completo" placeholder="Ej: Marlene Encina Vega" enterkeyhint="next" required oninput="actualizarBotonesCorreo()">
+                <input type="text" id="nombre" name="Nombre Completo" placeholder="Ej: Marlene Encina Vega" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
@@ -288,15 +265,14 @@
                 <input type="text" id="emoji" name="Emoji de Preferencia" placeholder="Ej: 💻, 🌿, 📁" maxlength="10" enterkeyhint="done">
             </div>
 
-            <!-- Botones flexibles Plan Pro para elegir servicio de correo (Al Final) -->
+            <!-- Cajetín de carga de archivo para Plan Pro (Al Final) -->
             <div id="rowProInfo" class="pro-box">
                 <p style="font-size: 0.7rem; color: #166534; margin-bottom: 4px; font-weight: 500;">
-                    <b>Plan Pro:</b> Elige tu correo favorito para enviar tu logotipo adjunto:
+                    <b>Plan Pro:</b> Adjunta tu logotipo o fotografía aquí:
                 </p>
-                <div class="email-options">
-                    <a id="btnGmail" href="#" target="_blank" class="email-btn gmail">🔴 Gmail Web</a>
-                    <a id="btnOutlook" href="#" target="_blank" class="email-btn outlook">🔵 Outlook / Hotmail</a>
-                    <a id="btnNative" href="#" class="email-btn native">✉️ App Nativa</a>
+                <div class="form-row" style="margin-bottom: 0;">
+                    <label style="width: auto;">Archivo de Logo:</label>
+                    <input type="file" id="logotipo" name="Logotipo_Cliente" accept="image/*">
                 </div>
             </div>
 
@@ -321,33 +297,10 @@
         if (plan.includes('Pro')) {
             rowEmoji.style.display = 'none';
             rowProInfo.classList.add('active');
-            actualizarBotonesCorreo();
         } else {
             rowEmoji.style.display = 'flex';
             rowProInfo.classList.remove('active');
         }
-    }
-
-    function actualizarBotonesCorreo() {
-        const nombreVal = document.getElementById('nombre').value.trim() || 'Cliente';
-        const ahora = new Date();
-        const dia = String(ahora.getDate()).padStart(2, '0');
-        const mes = String(ahora.getMonth() + 1).padStart(2, '0');
-        const anio = ahora.getFullYear();
-        const fechaLatam = `${dia}/${mes}/${anio}`;
-        const hora24 = ahora.toTimeString().split(' ')[0].substring(0, 5);
-
-        const asuntoCorreo = `Logotipo Plan Pro: ${nombreVal} - ${fechaLatam} ${hora24}`;
-        const cuerpoCorreo = `Hola, adjunto el logotipo / fotografía para la tarjeta digital de ${nombreVal}.`;
-
-        const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=marketingmaule@gmail.com&su=${encodeURIComponent(asuntoCorreo)}&body=${encodeURIComponent(cuerpoCorreo)}`;
-        document.getElementById('btnGmail').setAttribute('href', gmailUrl);
-
-        const outlookUrl = `https://outlook.live.com/owa/?path=/mail/action/compose&to=marketingmaule@gmail.com&subject=${encodeURIComponent(asuntoCorreo)}&body=${encodeURIComponent(cuerpoCorreo)}`;
-        document.getElementById('btnOutlook').setAttribute('href', outlookUrl);
-
-        const mailtoLink = `mailto:marketingmaule@gmail.com?subject=${encodeURIComponent(asuntoCorreo)}&body=${encodeURIComponent(cuerpoCorreo)}`;
-        document.getElementById('btnNative').setAttribute('href', mailtoLink);
     }
 
     const form = document.getElementById('tarjetaForm');
@@ -355,7 +308,7 @@
         e.preventDefault();
 
         const btn = document.getElementById('submitBtn');
-        btn.textContent = "Enviando solicitud...";
+        btn.textContent = "Enviando solicitud y archivo...";
         btn.disabled = true;
 
         const nombreVal = document.getElementById('nombre').value.trim();
@@ -467,7 +420,7 @@ END:VCARD`;
                     <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
                     <h2 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 8px;">¡Solicitud enviada con éxito!</h2>
                     <p style="color: #64748b; font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;">
-                        Tus datos han sido enviados correctamente a Marketing Maule.<br>
+                        Tus datos y archivo adjunto han sido enviados correctamente a Marketing Maule.<br>
                         Nos pondremos en contacto contigo a la brevedad para entregarte tu tarjeta digital.
                     </p>
                     <a href="https://marketingmaule.github.io/solicitud-tarjeta-digital/" style="color: #0d9488; text-decoration: none; font-weight: 600; font-size: 0.9rem;">← Enviar otra solicitud</a>
@@ -481,7 +434,7 @@ END:VCARD`;
         });
     });
 
-    const formInputs = document.querySelectorAll('form input:not([type="hidden"])');
+    const formInputs = document.querySelectorAll('form input:not([type="hidden"]):not([type="file"])');
     formInputs.forEach((input, index) => {
         input.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
