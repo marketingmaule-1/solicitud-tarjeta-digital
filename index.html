@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solicitud de Tarjeta Digital</title>
+    <title>Solicitud de Tarjeta Digital - Marketing Maule</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -38,7 +38,7 @@
 
         .wrapper {
             width: 100%;
-            max-width: 460px;
+            max-width: 480px;
             background: var(--card-bg);
             border-radius: 12px;
             box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
@@ -108,7 +108,7 @@
             color: var(--heading);
         }
 
-        input {
+        input, select {
             width: 100%;
             flex: 1;
             padding: 5px 8px;
@@ -121,7 +121,7 @@
             transition: all 0.2s ease;
         }
 
-        input:focus {
+        input:focus, select:focus {
             outline: none;
             border-color: var(--accent);
             box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.12);
@@ -131,6 +131,27 @@
             color: #94a3b8;
             font-weight: 400;
             font-size: 0.75rem;
+        }
+
+        .file-upload-box {
+            display: none;
+            background: #f8fafc;
+            border: 1px dashed var(--accent);
+            padding: 6px;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .file-upload-box.active {
+            display: block;
+        }
+
+        .file-upload-box input {
+            font-size: 0.7rem;
+            font-weight: 400;
+            border: none;
+            background: transparent;
         }
 
         .submit-btn {
@@ -161,21 +182,29 @@
 
 <div class="wrapper" id="appWrapper">
     <div class="app-header">
-        <div class="app-title">✨ Tu Tarjeta de Presentación Digital</div>
-        <div class="app-subtitle">Ingresa tus datos para elaborar tu tarjeta</div>
-        <div class="version-badge" id="versionTag">Versión: Cargando...</div>
+        <div class="app-title">✨ Tu Tarjeta de Presentación Digital MM</div>
+        <div class="app-subtitle">Selecciona tu plan e ingresa tus datos</div>
+        <div class="version-badge" id="versionTag">MM Versión: Cargando...</div>
     </div>
 
     <div class="form-container">
-        <form id="tarjetaForm">
+        <form id="tarjetaForm" enctype="multipart/form-data">
             
-            <input type="hidden" id="dynamicSubject" name="_subject" value="Solicitud Tarjeta Digital">
+            <input type="hidden" id="dynamicSubject" name="_subject" value="Solicitud Tarjeta Digital MM">
             <input type="hidden" name="_template" value="table">
             <input type="hidden" name="_captcha" value="false">
 
-            <!-- Campos ocultos para inyectar los bloques de código -->
+            <!-- Campos ocultos para inyectar los códigos -->
             <input type="hidden" id="vcfGenerated" name="CODIGO_VCF_PARA_GITHUB" value="">
             <input type="hidden" id="htmlGenerated" name="CODIGO_INDEX_HTML_PARA_GITHUB" value="">
+
+            <div class="form-row">
+                <label>Selecciona tu Plan</label>
+                <select id="tipoPlan" name="Plan Seleccionado" onchange="togglePlanFields()">
+                    <option value="Base ($9.900 - Sin logo / Emoji o GIF)">Plan Base ($9.900) - Sin logo / Con Emoji o GIF</option>
+                    <option value="Pro ($14.990 - Con logo o fotografía)">Plan Pro ($14.990) - Con Logo o Fotografía</option>
+                </select>
+            </div>
 
             <div class="form-row">
                 <label>Nombre completo</label>
@@ -194,7 +223,7 @@
 
             <div class="form-row">
                 <label>Título profesional u oficio</label>
-                <input type="text" id="titulo" name="Título Profesional u Oficio" enterkeyhint="next" placeholder="Ej: Técnica Agrícola, Mueblista, Fletes">
+                <input type="text" id="titulo" name="Título Profesional u Oficio" enterkeyhint="next" placeholder="Ej: Técnica Agrícola, Mueblista">
             </div>
 
             <div class="form-row">
@@ -227,21 +256,40 @@
                 <input type="text" id="redsocial" name="Red Social Principal" placeholder="Ej: https://www.facebook.com/ely.neira.31" enterkeyhint="next" required>
             </div>
 
-            <div class="form-row">
-                <label>Emoji de preferencia</label>
-                <input type="text" id="emoji" name="Emoji de Preferencia" placeholder="Ej: 🧵, 💼, 🛠️, 🌾, 🎨" maxlength="4" enterkeyhint="done">
+            <!-- Campo Condicional Plan Base: Emoji / GIF -->
+            <div class="form-row" id="rowEmoji">
+                <label>Emoji o GIF representativo</label>
+                <input type="text" id="emoji" name="Emoji o GIF de Preferencia" placeholder="Ej: 🧵, Cojín 🛋️" maxlength="30" enterkeyhint="done">
             </div>
 
-            <button type="submit" id="submitBtn" class="submit-btn">📩 Enviar Solicitud</button>
+            <!-- Campo Condicional Plan Pro: Subir Archivo de Logo/Foto -->
+            <div id="rowArchivo" class="file-upload-box">
+                <label style="display:block; text-align:center; font-size:0.7rem; margin-bottom:3px; color:#0d9488;">Adjunta tu Logo o Fotografía (Plan Pro)</label>
+                <input type="file" id="logoFile" name="Logo o Fotografía Adjunta" accept="image/*">
+            </div>
+
+            <button type="submit" id="submitBtn" class="submit-btn">📩 Enviar Solicitud a MM</button>
         </form>
     </div>
 </div>
 
 <script>
     const ahoraInit = new Date();
-    const fechaStr = ahoraInit.toLocaleDateString('es-CL');
-    const horaStr = ahoraInit.toLocaleTimeString('es-CL');
-    document.getElementById('versionTag').textContent = `⚡ Versión Compacta: ${fechaStr} - ${horaStr}`;
+    document.getElementById('versionTag').textContent = `MM v2.5: ${ahoraInit.toLocaleDateString('es-CL')} - ${ahoraInit.toLocaleTimeString('es-CL')}`;
+
+    function togglePlanFields() {
+        const plan = document.getElementById('tipoPlan').value;
+        const rowEmoji = document.getElementById('rowEmoji');
+        const rowArchivo = document.getElementById('rowArchivo');
+
+        if (plan.includes('Pro')) {
+            rowEmoji.style.display = 'none';
+            rowArchivo.classList.add('active');
+        } else {
+            rowEmoji.style.display = 'flex';
+            rowArchivo.classList.remove('active');
+        }
+    }
 
     const form = document.getElementById('tarjetaForm');
     form.addEventListener('submit', function(e) {
@@ -251,6 +299,7 @@
         btn.textContent = "Enviando solicitud...";
         btn.disabled = true;
 
+        const planVal = document.getElementById('tipoPlan').value;
         const emojiVal = document.getElementById('emoji').value.trim() || '👤';
         const nombreVal = document.getElementById('nombre').value.trim();
         const empresaVal = document.getElementById('empresa').value.trim();
@@ -267,7 +316,7 @@
         const fechaIso = ahora.toISOString().split('T')[0];
         const horaMin = ahora.toTimeString().split(' ')[0].substring(0,5);
         
-        document.getElementById('dynamicSubject').value = `Solicitud Tarjeta: ${nombreVal} - ${fechaIso} ${horaMin}`;
+        document.getElementById('dynamicSubject').value = `MM Solicitud (${planVal.split(' ')[0]}): ${nombreVal} - ${fechaIso}`;
 
         // VCF Completo
         const vcfContent = 
@@ -284,7 +333,7 @@ END:VCARD`;
 
         document.getElementById('vcfGenerated').value = vcfContent;
 
-        // INDEX.HTML Estándar Base (Formato Javiera)
+        // INDEX.HTML Estándar
         const htmlContent = 
 `<!DOCTYPE html>
 <html lang="es">
@@ -371,7 +420,7 @@ END:VCARD`;
                     <h2 style="color: #0f172a; font-size: 1.1rem; margin-bottom: 6px;">¡Solicitud enviada con éxito!</h2>
                     <p style="color: #64748b; font-size: 0.85rem; line-height: 1.4; margin-bottom: 16px;">
                         Tus datos han sido enviados correctamente a Marketing Maule.<br>
-                        Nos pondremos en contacto contigo a la brevedad para entregarte tu tarjeta digital.
+                        Nos pondremos en contacto contigo a la brevedad para coordinar tu tarjeta digital.
                     </p>
                     <a href="https://marketingmaule.github.io/solicitud-tarjeta-digital/" style="color: #0d9488; text-decoration: none; font-weight: 600; font-size: 0.85rem;">← Enviar otra solicitud</a>
                 </div>
@@ -379,22 +428,8 @@ END:VCARD`;
         })
         .catch(error => {
             alert("Hubo un error al enviar. Por favor intenta nuevamente.");
-            btn.textContent = "📩 Enviar Solicitud";
+            btn.textContent = "📩 Enviar Solicitud a MM";
             btn.disabled = false;
-        });
-    });
-
-    const formInputs = document.querySelectorAll('form input');
-    formInputs.forEach((input, index) => {
-        input.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                if (index < formInputs.length - 1) {
-                    formInputs[index + 1].focus();
-                } else {
-                    document.getElementById('submitBtn').click();
-                }
-            }
         });
     });
 </script>
