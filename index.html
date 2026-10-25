@@ -188,13 +188,12 @@
     </div>
 
     <div class="form-container">
-        <!-- Envío nativo directo a FormSubmit con soporte total de adjuntos -->
+        <!-- Envío nativo directo que soporta archivos adjuntos en FormSubmit -->
         <form id="tarjetaForm" action="https://formsubmit.co/marketingmaule@gmail.com" method="POST" enctype="multipart/form-data">
             
             <input type="hidden" id="dynamicSubject" name="_subject" value="Solicitud Tarjeta Digital">
             <input type="hidden" name="_template" value="table">
             <input type="hidden" name="_captcha" value="false">
-            <!-- Redirección automática de regreso al formulario con indicador de éxito -->
             <input type="hidden" name="_next" value="https://marketingmaule.github.io/solicitud-tarjeta-digital/?enviado=true">
 
             <!-- Campos ocultos para inyectar los códigos -->
@@ -280,7 +279,6 @@
     const ahoraInit = new Date();
     document.getElementById('versionTag').textContent = `Versión: ${ahoraInit.toLocaleDateString('es-CL')} - ${ahoraInit.toLocaleTimeString('es-CL')}`;
 
-    // Detectar si la página carga tras un envío exitoso mediante _next
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('enviado') === 'true') {
         document.getElementById('appWrapper').innerHTML = `
@@ -288,7 +286,7 @@
                 <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
                 <h2 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 8px;">¡Solicitud enviada con éxito!</h2>
                 <p style="color: #64748b; font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;">
-                    Tus datos y tu archivo adjunto han sido recibidos correctamente.<br>
+                    Tus datos y archivo adjunto han sido recibidos correctamente.<br>
                     Nos pondremos en contacto contigo a la brevedad.
                 </p>
                 <a href="https://marketingmaule.github.io/solicitud-tarjeta-digital/" style="color: #0d9488; text-decoration: none; font-weight: 600; font-size: 0.9rem;">← Enviar otra solicitud</a>
@@ -327,10 +325,9 @@
 
         const ahora = new Date();
         const fechaIso = ahora.toISOString().split('T')[0];
-        // Hora exacta formato HH:MM (ej. 23:15)
         const horaMin = ahora.toTimeString().split(' ')[0].substring(0,5);
         
-        // Asunto dinámico con fecha y hora exacta
+        // Asignación síncrona exacta de la hora en el asunto antes de viajar
         document.getElementById('dynamicSubject').value = `Solicitud (${planVal.split(' ')[0]}): ${nombreVal} - ${fechaIso} ${horaMin}`;
 
         // VCF Completo
