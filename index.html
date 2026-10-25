@@ -188,12 +188,12 @@
     </div>
 
     <div class="form-container">
-        <!-- Envío nativo directo que soporta archivos adjuntos en FormSubmit -->
         <form id="tarjetaForm" action="https://formsubmit.co/marketingmaule@gmail.com" method="POST" enctype="multipart/form-data">
             
             <input type="hidden" id="dynamicSubject" name="_subject" value="Solicitud Tarjeta Digital">
             <input type="hidden" name="_template" value="table">
             <input type="hidden" name="_captcha" value="false">
+            <!-- URL de retorno corregida con la ruta exacta del repositorio -->
             <input type="hidden" name="_next" value="https://marketingmaule.github.io/solicitud-tarjeta-digital/?enviado=true">
 
             <!-- Campos ocultos para inyectar los códigos -->
@@ -327,7 +327,7 @@
         const fechaIso = ahora.toISOString().split('T')[0];
         const horaMin = ahora.toTimeString().split(' ')[0].substring(0,5);
         
-        // Asignación síncrona exacta de la hora en el asunto antes de viajar
+        // Asunto con fecha y hora exacta
         document.getElementById('dynamicSubject').value = `Solicitud (${planVal.split(' ')[0]}): ${nombreVal} - ${fechaIso} ${horaMin}`;
 
         // VCF Completo
