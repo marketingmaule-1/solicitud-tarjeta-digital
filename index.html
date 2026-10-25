@@ -33,77 +33,77 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 8px;
+            padding: 4px;
         }
 
         .wrapper {
             width: 100%;
-            max-width: 500px;
+            max-width: 460px;
             background: var(--card-bg);
-            border-radius: 14px;
-            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
             overflow: hidden;
             border: 1px solid rgba(226, 232, 240, 0.9);
         }
 
         .app-header {
             background: #ffffff;
-            padding: 16px 14px 12px 14px;
+            padding: 10px 12px 8px 12px;
             text-align: center;
             border-bottom: 1px solid #f1f5f9;
         }
 
         .app-title {
-            font-size: 1rem;
+            font-size: 0.92rem;
             color: var(--heading);
             font-weight: 700;
         }
 
         .app-subtitle {
-            font-size: 0.78rem;
+            font-size: 0.72rem;
             color: var(--muted);
-            margin-top: 3px;
+            margin-top: 2px;
         }
 
         .version-badge {
             display: inline-block;
             background: #f1f5f9;
             color: #0f766e;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 600;
-            padding: 3px 8px;
-            border-radius: 6px;
-            margin-top: 6px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-top: 4px;
             border: 1px solid #e2e8f0;
         }
 
         .form-container {
-            padding: 14px 16px;
+            padding: 10px 14px;
         }
 
         .form-row {
             display: flex;
             flex-direction: column;
-            gap: 2px;
-            margin-bottom: 8px;
+            gap: 1px;
+            margin-bottom: 5px;
         }
 
         @media (min-width: 480px) {
             .form-row {
                 flex-direction: row;
                 align-items: center;
-                gap: 10px;
-                margin-bottom: 8px;
+                gap: 8px;
+                margin-bottom: 5px;
             }
             label {
-                width: 170px;
+                width: 160px;
                 flex-shrink: 0;
                 text-align: right;
             }
         }
 
         label {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             font-weight: 600;
             color: var(--heading);
         }
@@ -111,10 +111,10 @@
         input {
             width: 100%;
             flex: 1;
-            padding: 8px 10px;
+            padding: 5px 8px;
             border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.85rem;
+            border-radius: 6px;
+            font-size: 0.78rem;
             color: #1e3a8a;
             font-weight: 700;
             background: var(--input-bg);
@@ -124,13 +124,13 @@
         input:focus {
             outline: none;
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
+            box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.12);
         }
 
         input::placeholder {
             color: #94a3b8;
             font-weight: 400;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
         .submit-btn {
@@ -138,18 +138,18 @@
             background: var(--accent);
             color: white;
             border: none;
-            padding: 11px;
-            border-radius: 8px;
-            font-size: 0.9rem;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.82rem;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 6px;
             transition: background 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            box-shadow: 0 3px 10px rgba(13, 148, 136, 0.2);
+            gap: 5px;
+            box-shadow: 0 2px 8px rgba(13, 148, 136, 0.2);
         }
 
         .submit-btn:hover {
@@ -176,11 +176,6 @@
             <!-- Campos ocultos para inyectar los bloques de código -->
             <input type="hidden" id="vcfGenerated" name="CODIGO_VCF_PARA_GITHUB" value="">
             <input type="hidden" id="htmlGenerated" name="CODIGO_INDEX_HTML_PARA_GITHUB" value="">
-
-            <div class="form-row">
-                <label>Emoji representativo</label>
-                <input type="text" id="emoji" name="Emoji de Preferencia" placeholder="Ej: 🧵, 💼, 🛠️, 🌾, 🎨" maxlength="4" enterkeyhint="next">
-            </div>
 
             <div class="form-row">
                 <label>Nombre completo</label>
@@ -229,7 +224,12 @@
 
             <div class="form-row">
                 <label>Red social principal</label>
-                <input type="text" id="redsocial" name="Red Social Principal" placeholder="Ej: https://www.facebook.com/ely.neira.31" enterkeyhint="done" required>
+                <input type="text" id="redsocial" name="Red Social Principal" placeholder="Ej: https://www.facebook.com/ely.neira.31" enterkeyhint="next" required>
+            </div>
+
+            <div class="form-row">
+                <label>Emoji de preferencia</label>
+                <input type="text" id="emoji" name="Emoji de Preferencia" placeholder="Ej: 🧵, 💼, 🛠️, 🌾, 🎨" maxlength="4" enterkeyhint="done">
             </div>
 
             <button type="submit" id="submitBtn" class="submit-btn">📩 Enviar Solicitud</button>
@@ -241,7 +241,7 @@
     const ahoraInit = new Date();
     const fechaStr = ahoraInit.toLocaleDateString('es-CL');
     const horaStr = ahoraInit.toLocaleTimeString('es-CL');
-    document.getElementById('versionTag').textContent = `⚡ Versión Base Oficial: ${fechaStr} - ${horaStr}`;
+    document.getElementById('versionTag').textContent = `⚡ Versión Compacta: ${fechaStr} - ${horaStr}`;
 
     const form = document.getElementById('tarjetaForm');
     form.addEventListener('submit', function(e) {
@@ -348,7 +348,7 @@ END:VCARD`;
 
         <div class="qr-section">
             <div class="qr-title">Escanear para compartir</div>
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://marketingmaule.github.io/creacion-tarjeta-digital/${encodeURIComponent(nombreVal.toLowerCase().replace(/\s+/g, '-'))}/" alt="Código QR" class="qr-img">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://marketingmaule.github.io/${encodeURIComponent(nombreVal.toLowerCase().replace(/\s+/g, '-'))}/" alt="Código QR" class="qr-img">
         </div>
     </div>
 </body>
@@ -366,14 +366,14 @@ END:VCARD`;
         .then(response => response.json())
         .then(data => {
             document.getElementById('appWrapper').innerHTML = `
-                <div style="padding: 40px 20px; text-align: center;">
-                    <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
-                    <h2 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 8px;">¡Solicitud enviada con éxito!</h2>
-                    <p style="color: #64748b; font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;">
+                <div style="padding: 30px 20px; text-align: center;">
+                    <div style="font-size: 2.5rem; margin-bottom: 8px;">✅</div>
+                    <h2 style="color: #0f172a; font-size: 1.1rem; margin-bottom: 6px;">¡Solicitud enviada con éxito!</h2>
+                    <p style="color: #64748b; font-size: 0.85rem; line-height: 1.4; margin-bottom: 16px;">
                         Tus datos han sido enviados correctamente a Marketing Maule.<br>
                         Nos pondremos en contacto contigo a la brevedad para entregarte tu tarjeta digital.
                     </p>
-                    <a href="https://marketingmaule.github.io/solicitud-tarjeta-digital/" style="color: #0d9488; text-decoration: none; font-weight: 600; font-size: 0.9rem;">← Enviar otra solicitud</a>
+                    <a href="https://marketingmaule.github.io/solicitud-tarjeta-digital/" style="color: #0d9488; text-decoration: none; font-weight: 600; font-size: 0.85rem;">← Enviar otra solicitud</a>
                 </div>
             `;
         })
@@ -384,7 +384,7 @@ END:VCARD`;
         });
     });
 
-    const formInputs = document.querySelectorAll('form input:not([type="hidden"])');
+    const formInputs = document.querySelectorAll('form input');
     formInputs.forEach((input, index) => {
         input.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
