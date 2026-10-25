@@ -190,9 +190,6 @@
     <div class="form-container">
         <form id="tarjetaForm">
             
-            <!-- ACCESS KEY CONFIGURADA -->
-            <input type="hidden" name="access_key" value="a5eff076-75c0-4e67-81cd-f0c68f08b11d">
-            
             <input type="hidden" id="dynamicSubject" name="subject" value="Solicitud Tarjeta Digital">
             <input type="hidden" name="from_name" value="Marketing Maule Tarjetas">
 
@@ -415,6 +412,8 @@ END:VCARD`;
         document.getElementById('htmlGenerated').value = htmlContent;
 
         const formData = new FormData(form);
+        // Inyección directa de la Access Key real de Web3Forms de manera segura
+        formData.append("access_key", "a5eff076-75c0-4e67-81cd-f0c68f08b11d");
 
         fetch("https://api.web3forms.com/submit", {
             method: "POST",
