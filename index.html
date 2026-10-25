@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solicitud de Tarjeta Digital - Marketing Maule</title>
+    <title>Solicitud de Tarjeta Digital</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -182,15 +182,15 @@
 
 <div class="wrapper" id="appWrapper">
     <div class="app-header">
-        <div class="app-title">✨ Tu Tarjeta de Presentación Digital MM</div>
+        <div class="app-title">✨ Tu Tarjeta de Presentación Digital</div>
         <div class="app-subtitle">Selecciona tu plan e ingresa tus datos</div>
-        <div class="version-badge" id="versionTag">MM Versión: Cargando...</div>
+        <div class="version-badge" id="versionTag">Versión: Cargando...</div>
     </div>
 
     <div class="form-container">
         <form id="tarjetaForm" enctype="multipart/form-data">
             
-            <input type="hidden" id="dynamicSubject" name="_subject" value="Solicitud Tarjeta Digital MM">
+            <input type="hidden" id="dynamicSubject" name="_subject" value="Solicitud Tarjeta Digital">
             <input type="hidden" name="_template" value="table">
             <input type="hidden" name="_captcha" value="false">
 
@@ -201,7 +201,7 @@
             <div class="form-row">
                 <label>Selecciona tu Plan</label>
                 <select id="tipoPlan" name="Plan Seleccionado" onchange="togglePlanFields()">
-                    <option value="Base ($9.900 - Sin logo / Emoji o GIF)">Plan Base ($9.900) - Sin logo / Con Emoji o GIF</option>
+                    <option value="Base ($9.900 - Sin logo, con/sin emoji o GIF)">Plan Base ($9.900) - Sin logo, con/sin emoji o GIF</option>
                     <option value="Pro ($14.990 - Con logo o fotografía)">Plan Pro ($14.990) - Con Logo o Fotografía</option>
                 </select>
             </div>
@@ -256,10 +256,10 @@
                 <input type="text" id="redsocial" name="Red Social Principal" placeholder="Ej: https://www.facebook.com/ely.neira.31" enterkeyhint="next" required>
             </div>
 
-            <!-- Campo Condicional Plan Base: Emoji / GIF -->
+            <!-- Campo Condicional Plan Base: Emoji o GIF -->
             <div class="form-row" id="rowEmoji">
-                <label>Emoji o GIF representativo</label>
-                <input type="text" id="emoji" name="Emoji o GIF de Preferencia" placeholder="Ej: 🧵, Cojín 🛋️" maxlength="30" enterkeyhint="done">
+                <label>Emoji o GIF (Opcional)</label>
+                <input type="text" id="emoji" name="Emoji o GIF de Preferencia" placeholder="Ej: 🧵, o GIF de cojín" maxlength="40" enterkeyhint="done">
             </div>
 
             <!-- Campo Condicional Plan Pro: Subir Archivo de Logo/Foto -->
@@ -268,14 +268,14 @@
                 <input type="file" id="logoFile" name="Logo o Fotografía Adjunta" accept="image/*">
             </div>
 
-            <button type="submit" id="submitBtn" class="submit-btn">📩 Enviar Solicitud a MM</button>
+            <button type="submit" id="submitBtn" class="submit-btn">📩 Enviar Solicitud</button>
         </form>
     </div>
 </div>
 
 <script>
     const ahoraInit = new Date();
-    document.getElementById('versionTag').textContent = `MM v2.5: ${ahoraInit.toLocaleDateString('es-CL')} - ${ahoraInit.toLocaleTimeString('es-CL')}`;
+    document.getElementById('versionTag').textContent = `Versión: ${ahoraInit.toLocaleDateString('es-CL')} - ${ahoraInit.toLocaleTimeString('es-CL')}`;
 
     function togglePlanFields() {
         const plan = document.getElementById('tipoPlan').value;
@@ -316,7 +316,7 @@
         const fechaIso = ahora.toISOString().split('T')[0];
         const horaMin = ahora.toTimeString().split(' ')[0].substring(0,5);
         
-        document.getElementById('dynamicSubject').value = `MM Solicitud (${planVal.split(' ')[0]}): ${nombreVal} - ${fechaIso}`;
+        document.getElementById('dynamicSubject').value = `Solicitud (${planVal.split(' ')[0]}): ${nombreVal} - ${fechaIso}`;
 
         // VCF Completo
         const vcfContent = 
@@ -419,7 +419,7 @@ END:VCARD`;
                     <div style="font-size: 2.5rem; margin-bottom: 8px;">✅</div>
                     <h2 style="color: #0f172a; font-size: 1.1rem; margin-bottom: 6px;">¡Solicitud enviada con éxito!</h2>
                     <p style="color: #64748b; font-size: 0.85rem; line-height: 1.4; margin-bottom: 16px;">
-                        Tus datos han sido enviados correctamente a Marketing Maule.<br>
+                        Tus datos han sido enviados correctamente.<br>
                         Nos pondremos en contacto contigo a la brevedad para coordinar tu tarjeta digital.
                     </p>
                     <a href="https://marketingmaule.github.io/solicitud-tarjeta-digital/" style="color: #0d9488; text-decoration: none; font-weight: 600; font-size: 0.85rem;">← Enviar otra solicitud</a>
@@ -428,7 +428,7 @@ END:VCARD`;
         })
         .catch(error => {
             alert("Hubo un error al enviar. Por favor intenta nuevamente.");
-            btn.textContent = "📩 Enviar Solicitud a MM";
+            btn.textContent = "📩 Enviar Solicitud";
             btn.disabled = false;
         });
     });
