@@ -188,13 +188,14 @@
     </div>
 
     <div class="form-container">
-        <form id="tarjetaForm" action="https://formsubmit.co/marketingmaule@gmail.com" method="POST" enctype="multipart/form-data">
+        <!-- Formulario configurado con Web3Forms -->
+        <form id="tarjetaForm">
             
-            <input type="hidden" id="dynamicSubject" name="_subject" value="Solicitud Tarjeta Digital">
-            <input type="hidden" name="_template" value="table">
-            <input type="hidden" name="_captcha" value="false">
-            <!-- URL de retorno corregida exactamente con la subcarpeta del proyecto -->
-            <input type="hidden" name="_next" value="https://marketingmaule.github.io/solicitud-tarjeta-digital/?enviado=true">
+            <!-- ACCESS KEY DE WEB3FORMS (Vinculado a marketingmaule@gmail.com) -->
+            <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY">
+            
+            <input type="hidden" id="dynamicSubject" name="subject" value="Solicitud Tarjeta Digital">
+            <input type="hidden" name="from_name" value="Marketing Maule Tarjetas">
 
             <!-- Campos ocultos para inyectar los códigos -->
             <input type="hidden" id="vcfGenerated" name="CODIGO_VCF_PARA_GITHUB" value="">
@@ -267,7 +268,7 @@
             <!-- Plan Pro: Subir Archivo de Logo/Foto -->
             <div id="rowArchivo" class="file-upload-box">
                 <label style="display:block; text-align:center; font-size:0.7rem; margin-bottom:3px; color:#0d9488;">Adjunta tu Logo o Fotografía (Plan Pro)</label>
-                <input type="file" id="logoFile" name="Logo o Fotografia Adjunta" accept="image/*">
+                <input type="file" id="logoFile" name="attachment" accept="image/*">
             </div>
 
             <button type="submit" id="submitBtn" class="submit-btn">📩 Enviar Solicitud</button>
@@ -276,23 +277,10 @@
 </div>
 
 <script>
+    // Formato de fecha y hora latinoamericano (dd/mm/aaaa) y 24 horas
     const ahoraInit = new Date();
-    document.getElementById('versionTag').textContent = `Versión: ${ahoraInit.toLocaleDateString('es-CL')} - ${ahoraInit.toLocaleTimeString('es-CL')}`;
-
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('enviado') === 'true') {
-        document.getElementById('appWrapper').innerHTML = `
-            <div style="padding: 40px 20px; text-align: center;">
-                <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
-                <h2 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 8px;">¡Solicitud enviada con éxito!</h2>
-                <p style="color: #64748b; font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;">
-                    Tus datos, archivo adjunto y códigos han sido recibidos correctamente.<br>
-                    Nos pondremos en contacto contigo a la brevedad.
-                </p>
-                <a href="https://marketingmaule.github.io/solicitud-tarjeta-digital/" style="color: #0d9488; text-decoration: none; font-weight: 600; font-size: 0.9rem;">← Enviar otra solicitud</a>
-            </div>
-        `;
-    }
+    const optionsFecha = { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+    document.getElementById('versionTag').textContent = `Versión: ${ahoraInit.toLocaleString('es-CL', optionsFecha)}`;
 
     function togglePlanFields() {
         const plan = document.getElementById('tipoPlan').value;
@@ -310,6 +298,12 @@
 
     const form = document.getElementById('tarjetaForm');
     form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const btn = document.getElementById('submitBtn');
+        btn.textContent = "Enviando solicitud...";
+        btn.disabled = true;
+
         const planVal = document.getElementById('tipoPlan').value;
         const emojiVal = document.getElementById('emoji').value.trim() || '👤';
         const nombreVal = document.getElementById('nombre').value.trim();
@@ -323,12 +317,16 @@
         const webVal = document.getElementById('web').value.trim();
         const redsocialVal = document.getElementById('redsocial').value.trim();
 
+        // Generar fecha (dd/mm/aaaa) y hora en formato 24 horas exactas para el asunto
         const ahora = new Date();
-        const fechaIso = ahora.toISOString().split('T')[0];
-        const horaMin = ahora.toTimeString().split(' ')[0].substring(0,5);
-        
-        // Asunto exacto con nombre, plan, fecha y hora exacta
-        document.getElementById('dynamicSubject').value = `Solicitud (${planVal.split(' ')[0]}): ${nombreVal} - ${fechaIso} ${horaMin}`;
+        const dia = String(ahora.getDate()).padStart(2, '0');
+        const mes = String(ahora.getMonth() + 1).padStart(2, '0');
+        const anio = ahora.getFullYear();
+        const fechaLatam = `${dia}/${mes}/${anio}`;
+        const hora24 = ahora.toTimeString().split(' ')[0].substring(0, 5); // Ej: 23:45
+
+        // Asunto estructurado con formato latinoamericano y hora 24h
+        document.getElementById('dynamicSubject').value = `Solicitud (${planVal.split(' ')[0]}): ${nombreVal} - ${fechaLatam} ${hora24}`;
 
         // VCF Completo
         const vcfContent = 
@@ -416,6 +414,39 @@ END:VCARD`;
 </html>`;
 
         document.getElementById('htmlGenerated').value = htmlContent;
+
+        // Envío por Web3Forms mediante fetch (permite adjuntos y mantiene al usuario en la misma pantalla)
+        const formData = new FormData(form);
+
+        fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('appWrapper').innerHTML = `
+                    <div style="padding: 40px 20px; text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
+                        <h2 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 8px;">¡Solicitud enviada con éxito!</h2>
+                        <p style="color: #64748b; font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;">
+                            Tus datos, archivo adjunto y códigos han sido recibidos correctamente.<br>
+                            Nos pondremos en contacto contigo a la brevedad.
+                        </p>
+                        <a href="https://marketingmaule.github.io/solicitud-tarjeta-digital/" style="color: #0d9488; text-decoration: none; font-weight: 600; font-size: 0.9rem;">← Enviar otra solicitud</a>
+                    </div>
+                `;
+            } else {
+                alert("Error al enviar: " + data.message);
+                btn.textContent = "📩 Enviar Solicitud";
+                btn.disabled = false;
+            }
+        })
+        .catch(error => {
+            alert("Hubo un error de red. Por favor intenta nuevamente.");
+            btn.textContent = "📩 Enviar Solicitud";
+            btn.disabled = false;
+        });
     });
 </script>
 
