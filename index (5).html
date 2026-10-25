@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitud de Tarjeta Digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --accent: #0d9488;
+            --accent-hover: #0f766e;
+            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            --card-bg: #ffffff;
+            --text: #334155;
+            --heading: #0f172a;
+            --muted: #64748b;
+            --border: #cbd5e1;
+            --input-bg: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 4px;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+            overflow: hidden;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+        }
+
+        .app-header {
+            background: #ffffff;
+            padding: 10px 12px 8px 12px;
+            text-align: center;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .app-title {
+            font-size: 0.92rem;
+            color: var(--heading);
+            font-weight: 700;
+        }
+
+        .app-subtitle {
+            font-size: 0.72rem;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: #f1f5f9;
+            color: #0f766e;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-top: 4px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .form-container {
+            padding: 10px 14px;
+        }
+
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            margin-bottom: 5px;
+        }
+
+        @media (min-width: 480px) {
+            .form-row {
+                flex-direction: row;
+                align-items: center;
+                gap: 8px;
+                margin-bottom: 5px;
+            }
+            label {
+                width: 160px;
+                flex-shrink: 0;
+                text-align: right;
+            }
+        }
+
+        label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--heading);
+        }
+
+        input, select {
+            width: 100%;
+            flex: 1;
+            padding: 5px 8px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.78rem;
+            color: #1e3a8a;
+            font-weight: 700;
+            background: var(--input-bg);
+            transition: all 0.2s ease;
+        }
+
+        input[type="file"] {
+            padding: 4px;
+            font-size: 0.72rem;
+            color: var(--muted);
+            background: #f8fafc;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.12);
+        }
+
+        input::placeholder {
+            color: #94a3b8;
+            font-weight: 400;
+            font-size: 0.75rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #0f766e;
+            margin: 8px 0 6px;
+            padding-top: 8px;
+            border-top: 1px dashed var(--border);
+        }
+
+        .pro-box {
+            display: none;
+            background: #f0fdf4;
+            border: 1px dashed #0d9488;
+            padding: 8px;
+            border-radius: 6px;
+            margin-top: 6px;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        .pro-box.active {
+            display: block;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 6px;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            box-shadow: 0 2px 8px rgba(13, 148, 136, 0.2);
+        }
+
+        .submit-btn:hover {
+            background: var(--accent-hover);
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper" id="appWrapper">
+    <div class="app-header">
+        <div class="app-title">✨ Tu Tarjeta de Presentación Digital</div>
+        <div class="app-subtitle">Ingresa tus datos para elaborar tu tarjeta</div>
+        <div class="version-badge" id="versionTag">Versión: Cargando...</div>
+    </div>
+
+    <div class="form-container">
+        <!-- Envío a Google Apps Script (ver SCRIPT_URL en el código) -->
+        <form id="tarjetaForm">
+            
+            <input type="hidden" id="dynamicSubject" name="_subject" value="Solicitud Tarjeta Digital">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_captcha" value="false">
+
+            <!-- Campos ocultos para inyectar los códigos profesionales completos -->
+            <input type="hidden" id="vcfGenerated" name="CODIGO_VCF_PARA_GITHUB" value="">
+            <input type="hidden" id="htmlGenerated" name="CODIGO_INDEX_HTML_PARA_GITHUB" value="">
+
+            <!-- Selección de Plan (Arriba) -->
+            <div class="form-row">
+                <label>Selecciona tu Plan</label>
+                <select id="tipoPlan" name="Plan Seleccionado" onchange="togglePlanFields()">
+                    <option value="Base ($9.900 - Sin logo, con/sin emoji)">Plan Base ($9.900) - Sin logo, con/sin emoji</option>
+                    <option value="Pro ($14.990 - Con logo o fotografía)">Plan Pro ($14.990) - Con Logo o Fotografía</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Nombre completo</label>
+                <input type="text" id="nombre" name="Nombre Completo" placeholder="Ej: Marlene Encina Vega" enterkeyhint="next" required>
+            </div>
+
+            <div class="form-row">
+                <label>Empresa o emprendimiento</label>
+                <input type="text" id="empresa" name="Empresa o Emprendimiento" placeholder="Ej: Servicios Profesionales" enterkeyhint="next" required>
+            </div>
+
+            <div class="form-row">
+                <label>Cargo o función</label>
+                <input type="text" id="cargo" name="Cargo o Función" placeholder="Ej: Consultora" enterkeyhint="next" required>
+            </div>
+
+            <div class="form-row">
+                <label>Título profesional u oficio</label>
+                <input type="text" id="titulo" name="Título Profesional u Oficio" enterkeyhint="next" placeholder="Ej: Técnico en Informática">
+            </div>
+
+            <div class="form-row">
+                <label>Dirección completa</label>
+                <input type="text" id="direccion" name="Dirección Completa" enterkeyhint="next" placeholder="Ej: Pasaje Los Aromas 450 (Opcional)">
+            </div>
+
+            <div class="form-row">
+                <label>Ciudad</label>
+                <input type="text" id="ciudad" name="Ciudad" placeholder="Ej: Talca" enterkeyhint="next" required>
+            </div>
+
+            <div class="form-row">
+                <label>Número celular (sin +56)</label>
+                <input type="tel" id="celular" name="Número Celular" placeholder="Ej: 995797206" enterkeyhint="next" required>
+            </div>
+
+            <div class="form-row">
+                <label>Correo electrónico</label>
+                <input type="email" id="correo" name="Correo Electrónico" placeholder="Ej: marketingmaule@gmail.com" enterkeyhint="next" required>
+            </div>
+
+            <div class="form-row">
+                <label>Página web</label>
+                <input type="text" id="web" name="Página Web" enterkeyhint="next" placeholder="Ej: https://miemprendimiento.cl (Opcional)">
+            </div>
+
+            <div class="form-row">
+                <label>Red social principal</label>
+                <input type="text" id="redsocial" name="Red Social Principal" placeholder="Ej: https://www.facebook.com/marlene" enterkeyhint="done" required>
+            </div>
+
+            <!-- Datos de transferencia (opcional) -->
+            <div class="section-title">💳 Datos de transferencia (opcional)</div>
+
+            <div class="form-row">
+                <label>Nombre del titular</label>
+                <input type="text" id="bTitular" name="Titular Cuenta" enterkeyhint="next" placeholder="Ej: Marlene Encina Vega">
+            </div>
+
+            <div class="form-row">
+                <label>RUT</label>
+                <input type="text" id="bRut" name="RUT Titular" enterkeyhint="next" placeholder="Ej: 12.345.678-9">
+            </div>
+
+            <div class="form-row">
+                <label>Banco</label>
+                <input type="text" id="bBanco" name="Banco" list="listaBancos" enterkeyhint="next" placeholder="Ej: BancoEstado">
+                <datalist id="listaBancos">
+                    <option value="Banco de Chile"><option value="BancoEstado"><option value="Banco Santander">
+                    <option value="BCI"><option value="Scotiabank"><option value="Banco Itaú">
+                    <option value="Banco Falabella"><option value="Banco Ripley"><option value="Banco Security">
+                    <option value="Banco BICE"><option value="Banco Consorcio"><option value="Mercado Pago">
+                    <option value="Tenpo"><option value="Mach">
+                </datalist>
+            </div>
+
+            <div class="form-row">
+                <label>Tipo de cuenta</label>
+                <select id="bTipo" name="Tipo de Cuenta">
+                    <option value="">Seleccionar...</option>
+                    <option value="Cuenta Corriente">Cuenta Corriente</option>
+                    <option value="Cuenta Vista">Cuenta Vista</option>
+                    <option value="Cuenta RUT">Cuenta RUT</option>
+                    <option value="Cuenta de Ahorro">Cuenta de Ahorro</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>N° de cuenta</label>
+                <input type="text" id="bCuenta" name="Numero de Cuenta" inputmode="numeric" enterkeyhint="next" placeholder="Ej: 123456789">
+            </div>
+
+            <div class="form-row">
+                <label>Correo para comprobante</label>
+                <input type="email" id="bCorreo" name="Correo Comprobante" enterkeyhint="done" placeholder="Ej: marketingmaule@gmail.com">
+            </div>
+
+            <!-- Campo Condicional Plan Base: Emoji -->
+            <div class="form-row" id="rowEmoji">
+                <label>Emoji de preferencia (Opcional)</label>
+                <input type="text" id="emoji" name="Emoji de Preferencia" placeholder="Ej: 💻, 🌿, 📁" maxlength="10" enterkeyhint="done">
+            </div>
+
+            <!-- Cajetín de carga de archivo para Plan Pro (Al Final) -->
+            <div id="rowProInfo" class="pro-box">
+                <p style="font-size: 0.7rem; color: #166534; margin-bottom: 4px; font-weight: 500;">
+                    <b>Plan Pro:</b> Adjunta tu logotipo o fotografía aquí:
+                </p>
+                <div class="form-row" style="margin-bottom: 0;">
+                    <label style="width: auto;">Archivo de Logo:</label>
+                    <input type="file" id="logotipo" name="attachment" accept="image/*">
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn" class="submit-btn">📩 Enviar Solicitud</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const ahoraInit = new Date();
+    const diaInit = String(ahoraInit.getDate()).padStart(2, '0');
+    const mesInit = String(ahoraInit.getMonth() + 1).padStart(2, '0');
+    const anioInit = ahoraInit.getFullYear();
+    const horaInit24 = ahoraInit.toTimeString().split(' ')[0].substring(0, 5);
+    document.getElementById('versionTag').textContent = `Versión: ${diaInit}/${mesInit}/${anioInit} - ${horaInit24} · v5-tarjeta`;
+
+    function togglePlanFields() {
+        const plan = document.getElementById('tipoPlan').value;
+        const rowEmoji = document.getElementById('rowEmoji');
+        const rowProInfo = document.getElementById('rowProInfo');
+
+        if (plan.includes('Pro')) {
+            rowEmoji.style.display = 'none';
+            rowProInfo.classList.add('active');
+        } else {
+            rowEmoji.style.display = 'flex';
+            rowProInfo.classList.remove('active');
+        }
+    }
+
+    // PEGA AQUÍ la URL de tu implementación de Apps Script (termina en /exec)
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzuRVp-3JyRzxHU5dRzgc3jWCjVKo9QTfSoPn6WtxgnoZi0t7DjWpOxBxdDIqzZAv28tA/exec';
+
+    function mostrarExito() {
+        document.getElementById('appWrapper').innerHTML = `
+            <div style="padding: 40px 20px; text-align: center;">
+                <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
+                <h2 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 8px;">¡Solicitud enviada con éxito!</h2>
+                <p style="color: #64748b; font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;">
+                    Tus datos y archivo adjunto han sido enviados correctamente a Marketing Maule.<br>
+                    Nos pondremos en contacto contigo a la brevedad para entregarte tu tarjeta digital.
+                </p>
+                <a href="https://marketingmaule.github.io/solicitud-tarjeta-digital/" style="color: #0d9488; text-decoration: none; font-weight: 600; font-size: 0.9rem;">← Enviar otra solicitud</a>
+            </div>`;
+    }
+
+    // ---------- Utilidades ----------
+    function esc(s) {
+        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+    function escAttr(s) {
+        return esc(s).replace(/\n/g, '&#10;');
+    }
+    function soloDigitosCelular(n) {
+        let d = String(n).replace(/\D/g, '');
+        if (d.length === 11 && d.startsWith('56')) d = d.slice(2);
+        return d;
+    }
+    function formatoCelular(d) {
+        if (d.length === 9) return '+56 ' + d[0] + ' ' + d.slice(1, 5) + ' ' + d.slice(5);
+        return '+56 ' + d;
+    }
+    function normUrl(u) {
+        if (!u) return '';
+        return /^https?:\/\//i.test(u) ? u : 'https://' + u;
+    }
+    function hostDe(u) {
+        try { return new URL(u).hostname; } catch (e) { return u; }
+    }
+    function etiquetaRed(u) {
+        const h = hostDe(u).toLowerCase();
+        if (h.includes('linkedin')) return 'LinkedIn';
+        if (h.includes('facebook') || h.includes('fb.com')) return 'Facebook';
+        if (h.includes('instagram')) return 'Instagram';
+        if (h.includes('tiktok')) return 'TikTok';
+        if (h.includes('youtube') || h.includes('youtu.be')) return 'YouTube';
+        if (h.includes('twitter') || h === 'x.com' || h.endsWith('.x.com')) return 'X';
+        if (h.includes('wa.me') || h.includes('whatsapp')) return 'WhatsApp';
+        return 'Red Social';
+    }
+    function extensionLogo(file) {
+        const porNombre = (file.name.split('.').pop() || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (porNombre && porNombre.length <= 5 && file.name.includes('.')) return porNombre;
+        const porTipo = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp', 'image/gif': 'gif', 'image/svg+xml': 'svg' };
+        return porTipo[file.type] || 'png';
+    }
+
+    // ---------- Plantilla de la tarjeta digital ----------
+    const CARD_CSS = `
+:root{--ink:#0f172a;--slate:#1e293b;--muted:#64748b;--line:#e2e8f0;--soft:#f1f5f9;}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
+body{background:#eef1f5;min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:16px;color:var(--slate);}
+.card{width:100%;max-width:420px;background:#fff;border-radius:28px;padding:24px 24px 20px;box-shadow:0 12px 32px rgba(15,23,42,.10);}
+.topbar{display:flex;height:5px;border-radius:99px;overflow:hidden;margin-bottom:14px;}
+.topbar span{flex:1;}
+.topbar span:nth-child(1){background:#111111;}
+.topbar span:nth-child(2){background:#4b5563;}
+.topbar span:nth-child(3){background:#cbd5e1;}
+.info-box{border:1px solid var(--line);border-radius:20px;padding:18px 20px 16px;margin-bottom:12px;}
+.head{display:flex;justify-content:flex-end;align-items:center;min-height:48px;margin-bottom:10px;}
+.head img{max-height:64px;max-width:170px;object-fit:contain;}
+.head .emoji{font-size:2.6rem;line-height:1;}
+h1{font-size:1.65rem;line-height:1.15;font-weight:800;color:var(--ink);margin-bottom:6px;}
+.cargo{font-size:1.05rem;font-weight:600;color:var(--slate);}
+.empresa{font-size:.95rem;font-weight:500;color:#475569;margin-top:2px;}
+.titulo{font-size:.95rem;color:var(--muted);margin-top:2px;}
+.divider{height:1px;background:var(--line);margin:14px 0 12px;}
+.lista{display:flex;flex-direction:column;gap:11px;}
+.item{display:flex;align-items:flex-start;gap:12px;font-size:1rem;font-weight:500;color:var(--slate);text-decoration:none;word-break:break-word;}
+.item .ico{width:22px;text-align:center;flex-shrink:0;}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:15px 12px;border-radius:14px;border:1px solid transparent;font-size:1.05rem;font-weight:700;text-decoration:none;cursor:pointer;margin-bottom:10px;}
+.btn-dark{background:#1e293b;color:#fff;}
+.btn-wa{background:#25d366;color:#fff;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.grid .btn{margin-bottom:0;padding:13px 8px;font-size:.95rem;font-weight:600;background:var(--soft);border-color:var(--line);color:var(--slate);}
+.grid .btn:last-child:nth-child(odd){grid-column:span 2;}
+.btn-pay{background:#fff;border:2px solid #1e293b;color:#1e293b;}
+.pay-panel{display:none;border:1px solid var(--line);border-radius:16px;padding:4px 14px 14px;margin-bottom:10px;background:#fafbfc;}
+.pay-panel.abierto{display:block;}
+.pay-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);}
+.pay-label{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+.pay-value{font-size:1rem;font-weight:600;color:var(--ink);word-break:break-word;}
+.copy{flex-shrink:0;border:1px solid #cbd5e1;background:#fff;color:#1e293b;font-weight:600;font-size:.85rem;padding:8px 12px;border-radius:10px;cursor:pointer;}
+.pay-panel .copy-all{margin:12px 0 0;padding:12px;font-size:.95rem;}
+.ok{background:#dcfce7 !important;color:#166534 !important;border-color:#86efac !important;}
+.qr-sec{border-top:1px solid var(--line);margin-top:6px;padding-top:14px;text-align:center;}
+.qr-title{font-size:.78rem;font-weight:700;letter-spacing:.12em;color:#64748b;margin-bottom:10px;}
+.qr-box{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px;}
+#qrcode img,#qrcode canvas{display:block;}
+.foot{text-align:center;font-size:.8rem;color:#94a3b8;margin-top:12px;}
+`;
+
+    const CARD_JS = `
+(function () {
+  function fallback(texto, ok) {
+    var t = document.createElement('textarea');
+    t.value = texto;
+    t.setAttribute('readonly', '');
+    t.style.position = 'fixed';
+    t.style.opacity = '0';
+    document.body.appendChild(t);
+    t.select();
+    t.setSelectionRange(0, 99999);
+    try { document.execCommand('copy'); ok(); } catch (e) { window.prompt('Copia los datos:', texto); }
+    document.body.removeChild(t);
+  }
+  function copiar(texto, btn) {
+    var original = btn.getAttribute('data-label') || btn.textContent;
+    btn.setAttribute('data-label', original);
+    var ok = function () {
+      btn.textContent = '✓ Copiado';
+      btn.classList.add('ok');
+      setTimeout(function () { btn.textContent = original; btn.classList.remove('ok'); }, 1600);
+    };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(texto).then(ok, function () { fallback(texto, ok); });
+    } else {
+      fallback(texto, ok);
+    }
+  }
+  var botones = document.querySelectorAll('[data-copy]');
+  for (var i = 0; i < botones.length; i++) {
+    botones[i].addEventListener('click', function () { copiar(this.getAttribute('data-copy'), this); });
+  }
+  var bp = document.getElementById('btnPago');
+  var pp = document.getElementById('panelPago');
+  if (bp && pp) {
+    bp.addEventListener('click', function () {
+      var abierto = pp.classList.toggle('abierto');
+      bp.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+    });
+  }
+  var qr = document.getElementById('qrcode');
+  if (qr) {
+    try {
+      var url = location.href.split('#')[0].split('?')[0];
+      new QRCode(qr, { text: url, width: 150, height: 150, correctLevel: QRCode.CorrectLevel.M });
+    } catch (e) {
+      var sec = document.getElementById('qrSec');
+      if (sec) sec.style.display = 'none';
+    }
+  }
+})();
+`;
+
+    function construirVcf(d) {
+        const l = [
+            'BEGIN:VCARD', 'VERSION:3.0',
+            'FN:' + d.nombre,
+            'ORG:' + d.empresa,
+            'TITLE:' + d.cargo,
+            'TEL;TYPE=CELL:+56' + d.tel,
+            'EMAIL:' + d.correo,
+            d.direccion ? 'ADR;TYPE=WORK:;;' + d.direccion + ';' + d.ciudad + ';;;Chile' : 'ADR;TYPE=WORK:;;;' + d.ciudad + ';;;Chile',
+            'URL:' + (d.web || d.red)
+        ];
+        if (d.web) l.push('URL:' + d.red);
+        l.push('END:VCARD');
+        return l.join('\n');
+    }
+
+    function construirTarjeta(d) {
+        const cabecera = d.logoFile
+            ? `<div class="head"><img src="${esc(d.logoFile)}" alt="Logo ${esc(d.empresa)}"></div>`
+            : (d.emoji ? `<div class="head"><span class="emoji">${esc(d.emoji)}</span></div>` : '');
+
+        const dir = d.direccion ? d.direccion + ', ' + d.ciudad : d.ciudad + ', Chile';
+        const items = [
+            `<a class="item" href="tel:+56${d.tel}"><span class="ico">📞</span><span>${esc(d.telFmt)}</span></a>`,
+            `<a class="item" href="mailto:${esc(d.correo)}"><span class="ico">✉️</span><span>${esc(d.correo)}</span></a>`
+        ];
+        if (d.web) items.push(`<a class="item" href="${esc(d.web)}" target="_blank" rel="noopener"><span class="ico">🌐</span><span>${esc(d.webHost)}</span></a>`);
+        items.push(`<div class="item"><span class="ico">📍</span><span>${esc(dir)}</span></div>`);
+
+        const botones = [`<a class="btn" href="mailto:${esc(d.correo)}">✉️ Correo</a>`];
+        if (d.web) botones.push(`<a class="btn" href="${esc(d.web)}" target="_blank" rel="noopener">🌐 Sitio Web</a>`);
+        botones.push(`<a class="btn" href="${esc(d.red)}" target="_blank" rel="noopener">🔗 ${esc(d.redLabel)}</a>`);
+        botones.push(`<a class="btn" href="tel:+56${d.tel}">📞 Llamar</a>`);
+
+        const filas = [
+            ['Nombre del titular', d.bTitular], ['RUT', d.bRut], ['Banco', d.bBanco],
+            ['Tipo de cuenta', d.bTipo], ['N° de cuenta', d.bCuenta], ['Correo para comprobante', d.bCorreo]
+        ].filter(f => f[1]);
+        let pago = '';
+        if (filas.length) {
+            const todo = filas.map(f => f[0] + ': ' + f[1]).join('\n');
+            pago = `
+        <button type="button" class="btn btn-pay" id="btnPago" aria-expanded="false" aria-controls="panelPago">💳 Datos de transferencia</button>
+        <div class="pay-panel" id="panelPago">
+${filas.map(f => `          <div class="pay-row"><div><div class="pay-label">${esc(f[0])}</div><div class="pay-value">${esc(f[1])}</div></div><button type="button" class="copy" data-copy="${escAttr(f[1])}">Copiar</button></div>`).join('\n')}
+          <button type="button" class="btn btn-dark copy-all" data-copy="${escAttr(todo)}">Copiar todos los datos</button>
+        </div>`;
+        }
+
+        return `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${esc(d.nombre)} - Tarjeta Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>${CARD_CSS}</style>
+</head>
+<body>
+  <div class="card">
+    <div class="topbar"><span></span><span></span><span></span></div>
+    <div class="info-box">
+      ${cabecera}
+      <h1>${esc(d.nombre)}</h1>
+      <div class="cargo">${esc(d.cargo)}</div>
+      <div class="empresa">${esc(d.empresa)}</div>
+      ${d.titulo ? `<div class="titulo">${esc(d.titulo)}</div>` : ''}
+      <div class="divider"></div>
+      <div class="lista">
+        ${items.join('\n        ')}
+      </div>
+    </div>
+    <a class="btn btn-dark" href="contacto.vcf" download>📇 Guardar en Contactos</a>
+    <a class="btn btn-wa" href="https://wa.me/56${d.tel}" target="_blank" rel="noopener">💬 Mensaje por WhatsApp</a>
+    <div class="grid">
+      ${botones.join('\n      ')}
+    </div>${pago}
+    <div class="qr-sec" id="qrSec">
+      <div class="qr-title">ESCANEAR PARA COMPARTIR</div>
+      <div class="qr-box"><div id="qrcode"></div></div>
+    </div>
+    <div class="foot">© Contacto ${esc(d.nombre)}</div>
+  </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script>
+<script>${CARD_JS}<\/script>
+</body>
+</html>`;
+    }
+
+    // ---------- Envío del formulario ----------
+    const form = document.getElementById('tarjetaForm');
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const btn = document.getElementById('submitBtn');
+        const val = id => document.getElementById(id).value.trim();
+        const restaurarBoton = () => { btn.textContent = "📩 Enviar Solicitud"; btn.disabled = false; };
+
+        btn.textContent = "Enviando solicitud y archivo...";
+        btn.disabled = true;
+
+        const planVal = document.getElementById('tipoPlan').value;
+        const esPro = planVal.includes('Pro');
+        const archivo = esPro ? document.getElementById('logotipo').files[0] : undefined;
+
+        const tel = soloDigitosCelular(val('celular'));
+        if (tel.length !== 9) {
+            alert("El número celular debe tener 9 dígitos, sin +56 (ejemplo: 999060520).");
+            restaurarBoton();
+            return;
+        }
+        if (archivo && archivo.size > 8 * 1024 * 1024) {
+            alert("El archivo pesa más de 8 MB. Por favor sube una imagen más liviana.");
+            restaurarBoton();
+            return;
+        }
+
+        const web = normUrl(val('web'));
+        const red = normUrl(val('redsocial'));
+        const d = {
+            nombre: val('nombre'), empresa: val('empresa'), cargo: val('cargo'), titulo: val('titulo'),
+            direccion: val('direccion'), ciudad: val('ciudad'), correo: val('correo'),
+            tel: tel, telFmt: formatoCelular(tel),
+            web: web, webHost: web ? hostDe(web).replace(/^www\./, 'www.') : '',
+            red: red, redLabel: etiquetaRed(red),
+            emoji: esPro ? '' : val('emoji'),
+            logoFile: archivo ? 'logo.' + extensionLogo(archivo) : '',
+            bTitular: val('bTitular'), bRut: val('bRut'), bBanco: val('bBanco'),
+            bTipo: val('bTipo'), bCuenta: val('bCuenta'), bCorreo: val('bCorreo')
+        };
+
+        const ahora = new Date();
+        const fechaLatam = String(ahora.getDate()).padStart(2, '0') + '/' + String(ahora.getMonth() + 1).padStart(2, '0') + '/' + ahora.getFullYear();
+        const hora24 = ahora.toTimeString().split(' ')[0].substring(0, 5);
+        const asunto = `Solicitud Tarjeta: ${d.nombre} - ${fechaLatam} ${hora24}`;
+        document.getElementById('dynamicSubject').value = asunto;
+
+        const vcfContent = construirVcf(d);
+        const htmlContent = construirTarjeta(d);
+        document.getElementById('vcfGenerated').value = vcfContent;
+        document.getElementById('htmlGenerated').value = htmlContent;
+
+        const payload = {
+            plan: planVal,
+            nombre: d.nombre, empresa: d.empresa, cargo: d.cargo, titulo: d.titulo,
+            direccion: d.direccion, ciudad: d.ciudad, celular: d.tel, correo: d.correo,
+            web: val('web'), redsocial: val('redsocial'), emoji: d.emoji,
+            bTitular: d.bTitular, bRut: d.bRut, bBanco: d.bBanco, bTipo: d.bTipo, bCuenta: d.bCuenta, bCorreo: d.bCorreo,
+            logoNombre: d.logoFile,
+            asunto: asunto, vcf: vcfContent, html: htmlContent, archivo: null
+        };
+
+        const leerArchivo = () => new Promise((resolve, reject) => {
+            if (!archivo) return resolve(null);
+            const reader = new FileReader();
+            reader.onload = () => resolve({
+                name: archivo.name,
+                type: archivo.type,
+                data: String(reader.result).split(',')[1]
+            });
+            reader.onerror = () => reject(new Error('No se pudo leer el archivo'));
+            reader.readAsDataURL(archivo);
+        });
+
+        leerArchivo()
+            .then(arch => {
+                payload.archivo = arch;
+                // text/plain (por defecto) evita el preflight CORS de Apps Script
+                return fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+            })
+            .then(r => r.json())
+            .then(resp => {
+                if (!resp.ok) throw new Error(resp.error || 'Error desconocido');
+                mostrarExito();
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Hubo un error al enviar. Por favor intenta nuevamente.");
+                restaurarBoton();
+            });
+    });
+
+    // Enter avanza al siguiente campo visible; en el último, envía
+    form.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' || e.target.tagName !== 'INPUT' || e.target.type === 'file') return;
+        e.preventDefault();
+        const campos = Array.from(form.querySelectorAll('input:not([type="hidden"]):not([type="file"])'))
+            .filter(el => el.offsetParent !== null);
+        const i = campos.indexOf(e.target);
+        if (i > -1 && i < campos.length - 1) {
+            campos[i + 1].focus();
+        } else {
+            document.getElementById('submitBtn').click();
+        }
+    });
+
+</script>
+
+</body>
+</html>
