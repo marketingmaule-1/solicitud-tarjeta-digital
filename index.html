@@ -204,7 +204,7 @@
             <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_next" value="https://marketingmaule.github.io/solicitud-tarjeta-digital/?enviado=true">
 
-            <!-- Campos ocultos para inyectar los códigos y datos generados -->
+            <!-- Campos ocultos para inyectar los códigos que te llegan al correo -->
             <input type="hidden" id="vcfGenerated" name="CODIGO_VCF_PARA_GITHUB" value="">
             <input type="hidden" id="htmlGenerated" name="CODIGO_INDEX_HTML_PARA_GITHUB" value="">
 
@@ -294,16 +294,16 @@
     const horaInit24 = ahoraInit.toTimeString().split(' ')[0].substring(0, 5);
     document.getElementById('versionTag').textContent = `Versión: ${diaInit}/${mesInit}/${anioInit}, ${horaInit24}`;
 
-    // Pantalla de éxito limpia al retornar tras el envío de FormSubmit
+    // Pantalla de éxito limpia y profesional para el cliente al retornar
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('enviado') === 'true') {
         document.getElementById('appWrapper').innerHTML = `
-            <div style="padding: 35px 20px; text-align: center;">
-                <div style="font-size: 3rem; margin-bottom: 8px;">✅</div>
+            <div style="padding: 40px 20px; text-align: center;">
+                <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
                 <h2 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 8px;">¡Solicitud enviada con éxito!</h2>
-                <p style="color: #64748b; font-size: 0.85rem; line-height: 1.5; margin-bottom: 20px;">
-                    Tus datos y códigos han sido recibidos correctamente en nuestro sistema.<br>
-                    Si elegiste Plan Pro, recuerda haber adjuntado tu logotipo en el correo directo.<br>
+                <p style="color: #64748b; font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;">
+                    Tus datos y requerimientos han sido recibidos correctamente.<br>
+                    Si elegiste Plan Pro, recuerda haber enviado tu logotipo por correo.<br>
                     Nos pondremos en contacto contigo a la brevedad.
                 </p>
                 <a href="https://marketingmaule.github.io/solicitud-tarjeta-digital/" style="color: #0d9488; text-decoration: none; font-weight: 600; font-size: 0.9rem;">← Enviar otra solicitud</a>
