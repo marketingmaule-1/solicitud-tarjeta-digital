@@ -188,7 +188,8 @@
     </div>
 
     <div class="form-container">
-        <form id="tarjetaForm" enctype="multipart/form-data">
+        <!-- ACTION apunta directo a FormSubmit para garantizar el envío de archivos adjuntos -->
+        <form id="tarjetaForm" action="https://formsubmit.co/marketingmaule@gmail.com" method="POST" enctype="multipart/form-data">
             
             <input type="hidden" id="dynamicSubject" name="_subject" value="Solicitud Tarjeta Digital">
             <input type="hidden" name="_template" value="table">
@@ -201,71 +202,71 @@
             <div class="form-row">
                 <label>Selecciona tu Plan</label>
                 <select id="tipoPlan" name="Plan Seleccionado" onchange="togglePlanFields()">
-                    <option value="Base ($9.900 - Sin logo, con/sin emoji o GIF)">Plan Base ($9.900) - Sin logo, con/sin emoji o GIF</option>
+                    <option value="Base ($9.900 - Sin logo, con/sin emoji)">Plan Base ($9.900) - Sin logo, con/sin emoji</option>
                     <option value="Pro ($14.990 - Con logo o fotografía)">Plan Pro ($14.990) - Con Logo o Fotografía</option>
                 </select>
             </div>
 
             <div class="form-row">
                 <label>Nombre completo</label>
-                <input type="text" id="nombre" name="Nombre Completo" placeholder="Ej: Elizabeth Neira Garrido" enterkeyhint="next" required>
+                <input type="text" id="nombre" name="Nombre Completo" placeholder="Ej: Marcela Encina" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Empresa o emprendimiento</label>
-                <input type="text" id="empresa" name="Empresa o Emprendimiento" placeholder="Ej: Fundas y Cojines" enterkeyhint="next" required>
+                <input type="text" id="empresa" name="Empresa o Emprendimiento" placeholder="Ej: Emprendimiento Familiar" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Cargo o función</label>
-                <input type="text" id="cargo" name="Cargo o Función" placeholder="Ej: Productora artesanal" enterkeyhint="next" required>
+                <input type="text" id="cargo" name="Cargo o Función" placeholder="Ej: Directora General" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Título profesional u oficio</label>
-                <input type="text" id="titulo" name="Título Profesional u Oficio" enterkeyhint="next" placeholder="Ej: Técnica Agrícola, Mueblista">
+                <input type="text" id="titulo" name="Título Profesional u Oficio" enterkeyhint="next" placeholder="Ej: Profesora, Especialista">
             </div>
 
             <div class="form-row">
                 <label>Dirección completa</label>
-                <input type="text" id="direccion" name="Dirección Completa" enterkeyhint="next" placeholder="Ej: Pasaje Los Aromas 450 (Opcional)">
+                <input type="text" id="direccion" name="Dirección Completa" enterkeyhint="next" placeholder="Ej: Av. Principal 123 (Opcional)">
             </div>
 
             <div class="form-row">
                 <label>Ciudad</label>
-                <input type="text" id="ciudad" name="Ciudad" placeholder="Ej: Chillán" enterkeyhint="next" required>
+                <input type="text" id="ciudad" name="Ciudad" placeholder="Ej: Talca" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Número celular (sin +56)</label>
-                <input type="tel" id="celular" name="Número Celular" placeholder="Ej: 953952479" enterkeyhint="next" required>
+                <input type="tel" id="celular" name="Número Celular" placeholder="Ej: 987654321" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Correo electrónico</label>
-                <input type="email" id="correo" name="Correo Electrónico" placeholder="Ej: elyneiragarrido@gmail.com" enterkeyhint="next" required>
+                <input type="email" id="correo" name="Correo Electrónico" placeholder="Ej: marcela@correo.cl" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Página web</label>
-                <input type="text" id="web" name="Página Web" enterkeyhint="next" placeholder="Ej: https://humuschillan.cl (Opcional)">
+                <input type="text" id="web" name="Página Web" enterkeyhint="next" placeholder="Ej: https://miemprendimiento.cl (Opcional)">
             </div>
 
             <div class="form-row">
                 <label>Red social principal</label>
-                <input type="text" id="redsocial" name="Red Social Principal" placeholder="Ej: https://www.facebook.com/ely.neira.31" enterkeyhint="next" required>
+                <input type="text" id="redsocial" name="Red Social Principal" placeholder="Ej: https://www.instagram.com/marcela" enterkeyhint="next" required>
             </div>
 
-            <!-- Campo Condicional Plan Base: Emoji o GIF -->
+            <!-- Campo Condicional Plan Base: Emoji -->
             <div class="form-row" id="rowEmoji">
-                <label>Emoji o GIF (Opcional)</label>
-                <input type="text" id="emoji" name="Emoji o GIF de Preferencia" placeholder="Ej: 🧵, o GIF de cojín" maxlength="40" enterkeyhint="done">
+                <label>Emoji de preferencia (Opcional)</label>
+                <input type="text" id="emoji" name="Emoji de Preferencia" placeholder="Ej: 💼, 🌿, 🧵" maxlength="10" enterkeyhint="done">
             </div>
 
             <!-- Campo Condicional Plan Pro: Subir Archivo de Logo/Foto -->
             <div id="rowArchivo" class="file-upload-box">
                 <label style="display:block; text-align:center; font-size:0.7rem; margin-bottom:3px; color:#0d9488;">Adjunta tu Logo o Fotografía (Plan Pro)</label>
-                <input type="file" id="logoFile" name="Logo o Fotografía Adjunta" accept="image/*">
+                <input type="file" id="logoFile" name="Logo o Fotografia Adjunta" accept="image/*">
             </div>
 
             <button type="submit" id="submitBtn" class="submit-btn">📩 Enviar Solicitud</button>
@@ -293,12 +294,7 @@
 
     const form = document.getElementById('tarjetaForm');
     form.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const btn = document.getElementById('submitBtn');
-        btn.textContent = "Enviando solicitud...";
-        btn.disabled = true;
-
+        // Generación dinámica de contenidos antes del envío nativo
         const planVal = document.getElementById('tipoPlan').value;
         const emojiVal = document.getElementById('emoji').value.trim() || '👤';
         const nombreVal = document.getElementById('nombre').value.trim();
@@ -404,33 +400,6 @@ END:VCARD`;
 </html>`;
 
         document.getElementById('htmlGenerated').value = htmlContent;
-
-        const formData = new FormData(form);
-        
-        fetch("https://formsubmit.co/ajax/marketingmaule@gmail.com", {
-            method: "POST",
-            body: formData,
-            headers: { 'Accept': 'application/json' }
-        })
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('appWrapper').innerHTML = `
-                <div style="padding: 30px 20px; text-align: center;">
-                    <div style="font-size: 2.5rem; margin-bottom: 8px;">✅</div>
-                    <h2 style="color: #0f172a; font-size: 1.1rem; margin-bottom: 6px;">¡Solicitud enviada con éxito!</h2>
-                    <p style="color: #64748b; font-size: 0.85rem; line-height: 1.4; margin-bottom: 16px;">
-                        Tus datos han sido enviados correctamente.<br>
-                        Nos pondremos en contacto contigo a la brevedad para coordinar tu tarjeta digital.
-                    </p>
-                    <a href="https://marketingmaule.github.io/solicitud-tarjeta-digital/" style="color: #0d9488; text-decoration: none; font-weight: 600; font-size: 0.85rem;">← Enviar otra solicitud</a>
-                </div>
-            `;
-        })
-        .catch(error => {
-            alert("Hubo un error al enviar. Por favor intenta nuevamente.");
-            btn.textContent = "📩 Enviar Solicitud";
-            btn.disabled = false;
-        });
     });
 </script>
 
