@@ -193,9 +193,10 @@
             <input type="hidden" id="dynamicSubject" name="subject" value="Solicitud Tarjeta Digital">
             <input type="hidden" name="from_name" value="Marketing Maule Tarjetas">
 
-            <!-- Campos ocultos para inyectar los códigos -->
+            <!-- Campos ocultos para códigos y la imagen convertida -->
             <input type="hidden" id="vcfGenerated" name="CODIGO_VCF_PARA_GITHUB" value="">
             <input type="hidden" id="htmlGenerated" name="CODIGO_INDEX_HTML_PARA_GITHUB" value="">
+            <input type="hidden" id="imagenBase64" name="Imagen_Logotipo_Base64" value="">
 
             <div class="form-row">
                 <label>Selecciona tu Plan</label>
@@ -261,10 +262,10 @@
                 <input type="text" id="emoji" name="Emoji de Preferencia" placeholder="Ej: 🧵, 🛋️, 🌿" maxlength="10" enterkeyhint="done">
             </div>
 
-            <!-- Plan Pro: Subir Archivo de Logo/Foto -->
+            <!-- Plan Pro: Subir Archivo de Logo/Foto (Convertido automáticamente a texto) -->
             <div id="rowArchivo" class="file-upload-box">
                 <label style="display:block; text-align:center; font-size:0.7rem; margin-bottom:3px; color:#0d9488;">Adjunta tu Logo o Fotografía (Plan Pro)</label>
-                <input type="file" id="logoFile" name="attachment" accept="image/*">
+                <input type="file" id="logoFile" accept="image/*" onchange="convertirImagen(this)">
             </div>
 
             <button type="submit" id="submitBtn" class="submit-btn">📩 Enviar Solicitud</button>
@@ -289,6 +290,17 @@
         } else {
             rowEmoji.style.display = 'flex';
             rowArchivo.classList.remove('active');
+        }
+    }
+
+    // Convertir imagen a Base64 para que viaje gratis en el texto del correo
+    function convertirImagen(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('imagenBase64').value = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
         }
     }
 
@@ -412,7 +424,6 @@ END:VCARD`;
         document.getElementById('htmlGenerated').value = htmlContent;
 
         const formData = new FormData(form);
-        // Inyección directa de la Access Key real de Web3Forms de manera segura
         formData.append("access_key", "a5eff076-75c0-4e67-81cd-f0c68f08b11d");
 
         fetch("https://api.web3forms.com/submit", {
@@ -427,7 +438,7 @@ END:VCARD`;
                         <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
                         <h2 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 8px;">¡Solicitud enviada con éxito!</h2>
                         <p style="color: #64748b; font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;">
-                            Tus datos, archivo adjunto y códigos han sido recibidos correctamente.<br>
+                            Tus datos, logotipo y códigos han sido recibidos correctamente.<br>
                             Nos pondremos en contacto contigo a la brevedad.
                         </p>
                         <a href="https://marketingmaule.github.io/solicitud-tarjeta-digital/" style="color: #0d9488; text-decoration: none; font-weight: 600; font-size: 0.9rem;">← Enviar otra solicitud</a>
