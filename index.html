@@ -33,133 +33,104 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 4px;
+            padding: 8px;
         }
 
         .wrapper {
             width: 100%;
-            max-width: 480px;
+            max-width: 500px;
             background: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+            border-radius: 14px;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
             overflow: hidden;
             border: 1px solid rgba(226, 232, 240, 0.9);
         }
 
         .app-header {
             background: #ffffff;
-            padding: 10px 12px 8px 12px;
+            padding: 16px 14px 12px 14px;
             text-align: center;
             border-bottom: 1px solid #f1f5f9;
         }
 
         .app-title {
-            font-size: 0.92rem;
+            font-size: 1rem;
             color: var(--heading);
             font-weight: 700;
         }
 
         .app-subtitle {
-            font-size: 0.72rem;
+            font-size: 0.78rem;
             color: var(--muted);
-            margin-top: 2px;
+            margin-top: 3px;
         }
 
         .version-badge {
             display: inline-block;
             background: #f1f5f9;
             color: #0f766e;
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             font-weight: 600;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-top: 4px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-top: 6px;
             border: 1px solid #e2e8f0;
         }
 
         .form-container {
-            padding: 10px 14px;
+            padding: 14px 16px;
         }
 
         .form-row {
             display: flex;
             flex-direction: column;
-            gap: 1px;
-            margin-bottom: 5px;
+            gap: 2px;
+            margin-bottom: 8px;
         }
 
         @media (min-width: 480px) {
             .form-row {
                 flex-direction: row;
                 align-items: center;
-                gap: 8px;
-                margin-bottom: 5px;
+                gap: 10px;
+                margin-bottom: 8px;
             }
             label {
-                width: 160px;
+                width: 170px;
                 flex-shrink: 0;
                 text-align: right;
             }
         }
 
         label {
-            font-size: 0.72rem;
+            font-size: 0.75rem;
             font-weight: 600;
             color: var(--heading);
         }
 
-        input, select {
+        input {
             width: 100%;
             flex: 1;
-            padding: 5px 8px;
+            padding: 8px 10px;
             border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 0.78rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
             color: #1e3a8a;
             font-weight: 700;
             background: var(--input-bg);
             transition: all 0.2s ease;
         }
 
-        input:focus, select:focus {
+        input:focus {
             outline: none;
             border-color: var(--accent);
-            box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.12);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
         }
 
         input::placeholder {
             color: #94a3b8;
             font-weight: 400;
-            font-size: 0.75rem;
-        }
-
-        .pro-box {
-            display: none;
-            background: #f0fdf4;
-            border: 1px dashed #0d9488;
-            padding: 8px;
-            border-radius: 6px;
-            margin-bottom: 6px;
-            text-align: center;
-        }
-
-        .pro-box.active {
-            display: block;
-        }
-
-        .email-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            background: #1e3a8a;
-            color: white;
-            text-decoration: none;
-            font-size: 0.72rem;
-            font-weight: 600;
-            padding: 6px 10px;
-            border-radius: 6px;
-            margin-top: 4px;
+            font-size: 0.8rem;
         }
 
         .submit-btn {
@@ -167,18 +138,18 @@
             background: var(--accent);
             color: white;
             border: none;
-            padding: 8px;
-            border-radius: 6px;
-            font-size: 0.82rem;
+            padding: 11px;
+            border-radius: 8px;
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 6px;
+            margin-top: 10px;
             transition: background 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
-            box-shadow: 0 2px 8px rgba(13, 148, 136, 0.2);
+            gap: 6px;
+            box-shadow: 0 3px 10px rgba(13, 148, 136, 0.2);
         }
 
         .submit-btn:hover {
@@ -191,42 +162,24 @@
 <div class="wrapper" id="appWrapper">
     <div class="app-header">
         <div class="app-title">✨ Tu Tarjeta de Presentación Digital</div>
-        <div class="app-subtitle">Selecciona tu plan e ingresa tus datos</div>
+        <div class="app-subtitle">Ingresa tus datos para elaborar tu tarjeta</div>
         <div class="version-badge" id="versionTag">Versión: Cargando...</div>
     </div>
 
     <div class="form-container">
-        <!-- Formulario configurado con FormSubmit -->
-        <form id="tarjetaForm" action="https://formsubmit.co/marketingmaule@gmail.com" method="POST" onsubmit="prepararEnvio()">
+        <form id="tarjetaForm">
             
             <input type="hidden" id="dynamicSubject" name="_subject" value="Solicitud Tarjeta Digital">
             <input type="hidden" name="_template" value="table">
             <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_next" value="https://marketingmaule.github.io/solicitud-tarjeta-digital/?enviado=true">
 
-            <!-- Campos ocultos para inyectar los códigos que te llegan al correo -->
+            <!-- Campos ocultos para inyectar los códigos profesionales completos -->
             <input type="hidden" id="vcfGenerated" name="CODIGO_VCF_PARA_GITHUB" value="">
             <input type="hidden" id="htmlGenerated" name="CODIGO_INDEX_HTML_PARA_GITHUB" value="">
 
             <div class="form-row">
-                <label>Selecciona tu Plan</label>
-                <select id="tipoPlan" name="Plan Seleccionado" onchange="togglePlanFields()">
-                    <option value="Base ($9.900 - Sin logo, con/sin emoji)">Plan Base ($9.900) - Sin logo, con/sin emoji</option>
-                    <option value="Pro ($14.990 - Con logo o fotografía)">Plan Pro ($14.990) - Con Logo o Fotografía</option>
-                </select>
-            </div>
-
-            <!-- Botón exclusivo Plan Pro para adjuntar logo por correo seguro -->
-            <div id="rowProInfo" class="pro-box">
-                <p style="font-size: 0.7rem; color: #166534; margin-bottom: 3px; font-weight: 500;">
-                    <b>Plan Pro:</b> Haz clic para adjuntar y enviar tu logotipo por correo.
-                </p>
-                <a id="btnEnviarLogo" href="#" target="_blank" class="email-btn">✉️ Adjuntar Logo a marketingmaule@gmail.com</a>
-            </div>
-
-            <div class="form-row">
                 <label>Nombre completo</label>
-                <input type="text" id="nombre" name="Nombre Completo" placeholder="Ej: Marlene [Apellido]" enterkeyhint="next" required oninput="actualizarBotonCorreo()">
+                <input type="text" id="nombre" name="Nombre Completo" placeholder="Ej: Elizabeth Neira Garrido" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
@@ -236,12 +189,12 @@
 
             <div class="form-row">
                 <label>Cargo o función</label>
-                <input type="text" id="cargo" name="Cargo o Función" placeholder="Ej: Directora Creativa" enterkeyhint="next" required>
+                <input type="text" id="cargo" name="Cargo o Función" placeholder="Ej: Productora artesanal" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Título profesional u oficio</label>
-                <input type="text" id="titulo" name="Título Profesional u Oficio" enterkeyhint="next" placeholder="Ej: Diseñadora, Especialista">
+                <input type="text" id="titulo" name="Título Profesional u Oficio" enterkeyhint="next" placeholder="Ej: Técnica Agrícola, Mueblista, Fletes">
             </div>
 
             <div class="form-row">
@@ -251,33 +204,27 @@
 
             <div class="form-row">
                 <label>Ciudad</label>
-                <input type="text" id="ciudad" name="Ciudad" placeholder="Ej: Talca" enterkeyhint="next" required>
+                <input type="text" id="ciudad" name="Ciudad" placeholder="Ej: Chillán" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Número celular (sin +56)</label>
-                <input type="tel" id="celular" name="Número Celular" placeholder="Ej: 987654321" enterkeyhint="next" required>
+                <input type="tel" id="celular" name="Número Celular" placeholder="Ej: 953952479" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Correo electrónico</label>
-                <input type="email" id="correo" name="Correo Electrónico" placeholder="Ej: marlene@correo.cl" enterkeyhint="next" required>
+                <input type="email" id="correo" name="Correo Electrónico" placeholder="Ej: elyneiragarrido@gmail.com" enterkeyhint="next" required>
             </div>
 
             <div class="form-row">
                 <label>Página web</label>
-                <input type="text" id="web" name="Página Web" enterkeyhint="next" placeholder="Ej: https://miemprendimiento.cl (Opcional)">
+                <input type="text" id="web" name="Página Web" enterkeyhint="next" placeholder="Ej: https://humuschillan.cl (Opcional)">
             </div>
 
             <div class="form-row">
                 <label>Red social principal</label>
-                <input type="text" id="redsocial" name="Red Social Principal" placeholder="Ej: https://www.instagram.com/marlene" enterkeyhint="next" required>
-            </div>
-
-            <!-- Campo Condicional Plan Base: Emoji -->
-            <div class="form-row" id="rowEmoji">
-                <label>Emoji de preferencia (Opcional)</label>
-                <input type="text" id="emoji" name="Emoji de Preferencia" placeholder="Ej: 🧵, 🛋️, 🌿" maxlength="10" enterkeyhint="done">
+                <input type="text" id="redsocial" name="Red Social Principal" placeholder="Ej: https://www.facebook.com/ely.neira.31" enterkeyhint="done" required>
             </div>
 
             <button type="submit" id="submitBtn" class="submit-btn">📩 Enviar Solicitud</button>
@@ -286,65 +233,19 @@
 </div>
 
 <script>
-    // Fecha y hora en formato latinoamericano (dd/mm/aaaa) y 24 horas exactas
     const ahoraInit = new Date();
-    const diaInit = String(ahoraInit.getDate()).padStart(2, '0');
-    const mesInit = String(ahoraInit.getMonth() + 1).padStart(2, '0');
-    const anioInit = ahoraInit.getFullYear();
-    const horaInit24 = ahoraInit.toTimeString().split(' ')[0].substring(0, 5);
-    document.getElementById('versionTag').textContent = `Versión: ${diaInit}/${mesInit}/${anioInit}, ${horaInit24}`;
+    const fechaStr = ahoraInit.toLocaleDateString('es-CL');
+    const horaStr = ahoraInit.toLocaleTimeString('es-CL');
+    document.getElementById('versionTag').textContent = `⚡ Versión Pro: ${fechaStr} - ${horaStr}`;
 
-    // Pantalla de éxito limpia y profesional para el cliente al retornar
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('enviado') === 'true') {
-        document.getElementById('appWrapper').innerHTML = `
-            <div style="padding: 40px 20px; text-align: center;">
-                <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
-                <h2 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 8px;">¡Solicitud enviada con éxito!</h2>
-                <p style="color: #64748b; font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;">
-                    Tus datos y requerimientos han sido recibidos correctamente.<br>
-                    Si elegiste Plan Pro, recuerda haber enviado tu logotipo por correo.<br>
-                    Nos pondremos en contacto contigo a la brevedad.
-                </p>
-                <a href="https://marketingmaule.github.io/solicitud-tarjeta-digital/" style="color: #0d9488; text-decoration: none; font-weight: 600; font-size: 0.9rem;">← Enviar otra solicitud</a>
-            </div>
-        `;
-    }
+    const form = document.getElementById('tarjetaForm');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
 
-    function togglePlanFields() {
-        const plan = document.getElementById('tipoPlan').value;
-        const rowEmoji = document.getElementById('rowEmoji');
-        const rowProInfo = document.getElementById('rowProInfo');
+        const btn = document.getElementById('submitBtn');
+        btn.textContent = "Enviando solicitud...";
+        btn.disabled = true;
 
-        if (plan.includes('Pro')) {
-            rowEmoji.style.display = 'none';
-            rowProInfo.classList.add('active');
-            actualizarBotonCorreo();
-        } else {
-            rowEmoji.style.display = 'flex';
-            rowProInfo.classList.remove('active');
-        }
-    }
-
-    function actualizarBotonCorreo() {
-        const nombreVal = document.getElementById('nombre').value.trim() || 'Cliente';
-        const ahora = new Date();
-        const dia = String(ahora.getDate()).padStart(2, '0');
-        const mes = String(ahora.getMonth() + 1).padStart(2, '0');
-        const anio = ahora.getFullYear();
-        const fechaLatam = `${dia}/${mes}/${anio}`;
-        const hora24 = ahora.toTimeString().split(' ')[0].substring(0, 5);
-
-        const asuntoCorreo = `Logotipo Plan Pro: ${nombreVal} - ${fechaLatam} ${hora24}`;
-        const cuerpoCorreo = `Hola, adjunto el logotipo / fotografía para la tarjeta digital de ${nombreVal}.`;
-
-        const mailtoLink = `mailto:marketingmaule@gmail.com?subject=${encodeURIComponent(asuntoCorreo)}&body=${encodeURIComponent(cuerpoCorreo)}`;
-        document.getElementById('btnEnviarLogo').setAttribute('href', mailtoLink);
-    }
-
-    function prepararEnvio() {
-        const planVal = document.getElementById('tipoPlan').value;
-        const emojiVal = document.getElementById('emoji').value.trim() || '👤';
         const nombreVal = document.getElementById('nombre').value.trim();
         const empresaVal = document.getElementById('empresa').value.trim();
         const cargoVal = document.getElementById('cargo').value.trim();
@@ -356,18 +257,13 @@
         const webVal = document.getElementById('web').value.trim();
         const redsocialVal = document.getElementById('redsocial').value.trim();
 
-        // Fecha (dd/mm/aaaa) y hora en formato 24 horas exactas para el asunto
         const ahora = new Date();
-        const dia = String(ahora.getDate()).padStart(2, '0');
-        const mes = String(ahora.getMonth() + 1).padStart(2, '0');
-        const anio = ahora.getFullYear();
-        const fechaLatam = `${dia}/${mes}/${anio}`;
-        const hora24 = ahora.toTimeString().split(' ')[0].substring(0, 5);
+        const fechaIso = ahora.toISOString().split('T')[0];
+        const horaMin = ahora.toTimeString().split(' ')[0].substring(0,5);
+        
+        document.getElementById('dynamicSubject').value = `Solicitud Tarjeta: ${nombreVal} - ${fechaIso} ${horaMin}`;
 
-        // Asunto dinámico con formato latinoamericano y hora 24h
-        document.getElementById('dynamicSubject').value = `Solicitud (${planVal.split(' ')[0]}): ${nombreVal} - ${fechaLatam} ${hora24}`;
-
-        // VCF Completo
+        // VCF Completo y Estructurado
         const vcfContent = 
 `BEGIN:VCARD
 VERSION:3.0
@@ -382,7 +278,7 @@ END:VCARD`;
 
         document.getElementById('vcfGenerated').value = vcfContent;
 
-        // INDEX.HTML Completo
+        // INDEX.HTML Profesional Completo
         const htmlContent = 
 `<!DOCTYPE html>
 <html lang="es">
@@ -393,67 +289,99 @@ END:VCARD`;
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #1e293b;
-            --accent-color: #0284c7;
-            --whatsapp-color: #25d366;
-            --bg-color: #f1f5f9;
+            --primary: #1e3a8a;
+            --accent: #0d9488;
+            --bg: #f8fafc;
             --card-bg: #ffffff;
-            --text-color: #334155;
-            --muted-color: #64748b;
+            --text: #334155;
+            --heading: #0f172a;
+            --muted: #64748b;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 16px; }
-        .card { width: 100%; max-width: 420px; background: var(--card-bg); border-radius: 20px; box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08); padding: 28px 20px; text-align: center; border: 1px solid #e2e8f0; }
-        .avatar-emoji { font-size: 3.5rem; margin-bottom: 10px; display: inline-block; background: #f8fafc; width: 90px; height: 90px; line-height: 90px; border-radius: 50%; border: 1px solid #e2e8f0; }
-        h1 { font-size: 1.35rem; color: #0f172a; font-weight: 700; margin-bottom: 4px; }
-        h2 { font-size: 0.95rem; color: var(--accent-color); font-weight: 600; margin-bottom: 4px; }
-        .company { font-size: 0.85rem; color: var(--muted-color); margin-bottom: 15px; }
-        ${tituloVal ? `.titulo-badge { font-size: 0.78rem; background: #f1f5f9; color: #475569; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 15px; font-weight: 500; }` : ''}
-        
-        .main-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; margin-bottom: 15px; }
-        .btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: transform 0.1s, opacity 0.2s; }
-        .btn:active { transform: scale(0.98); }
-        .btn-vcf { background: #1e293b; color: #ffffff; }
-        .btn-ws { background: var(--whatsapp-color); color: #ffffff; }
-        
-        .grid-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .btn-sub { background: #f8fafc; color: #334155; border: 1px solid #e2e8f0; font-size: 0.82rem; padding: 10px; }
-        
-        .qr-section { margin-top: 20px; border-top: 1px solid #f1f5f9; padding-top: 18px; }
-        .qr-title { font-size: 0.7rem; font-weight: 700; color: #94a3b8; letter-spacing: 0.05em; margin-bottom: 10px; text-transform: uppercase; }
-        .qr-img { width: 130px; height: 130px; border-radius: 10px; border: 1px solid #e2e8f0; padding: 5px; background: #ffffff; }
+        body { background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 16px; }
+        .card { width: 100%; max-width: 400px; background: var(--card-bg); border-radius: 20px; box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08); padding: 30px 20px; text-align: center; border: 1px solid #e2e8f0; }
+        .avatar { width: 90px; height: 90px; background: #e2e8f0; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--primary); font-weight: 700; }
+        h1 { font-size: 1.4rem; color: var(--heading); margin-bottom: 4px; }
+        h2 { font-size: 0.95rem; color: var(--accent); font-weight: 600; margin-bottom: 4px; }
+        .company { font-size: 0.85rem; color: var(--muted); margin-bottom: 15px; }
+        ${tituloVal ? `.titulo { font-size: 0.8rem; background: #f1f5f9; padding: 4px 10px; border-radius: 20px; display: inline-block; margin-bottom: 15px; color: var(--text); }` : ''}
+        .actions { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: opacity 0.2s; }
+        .btn-primary { background: var(--accent); color: white; box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2); }
+        .btn-secondary { background: #f1f5f9; color: var(--primary); border: 1px solid #cbd5e1; }
+        .btn:hover { opacity: 0.9; }
+        .info-list { text-align: left; margin: 20px 0; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; padding: 15px 0; display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem; }
+        .info-item { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; }
     </style>
 </head>
 <body>
     <div class="card">
-        <div class="avatar-emoji">${emojiVal}</div>
+        <div class="avatar">${nombreVal.charAt(0)}</div>
         <h1>${nombreVal}</h1>
         <h2>${cargoVal}</h2>
-        <div class="company">${empresaVal} • ${ciudadVal}</div>
-        ${tituloVal ? `<div class="titulo-badge">${tituloVal}</div>` : ''}
-
-        <div class="main-actions">
-            <a href="contacto.vcf" class="btn btn-vcf" download>💾 Guardar en Contactos</a>
-            <a href="https://wa.me/56${celularVal}?text=Hola%20${encodeURIComponent(nombreVal)},%20vi%20tu%20tarjeta%20digital." target="_blank" class="btn btn-ws">💬 Mensaje por WhatsApp</a>
+        <div class="company">${empresaVal}</div>
+        ${tituloVal ? `<div class="titulo">${tituloVal}</div>` : ''}
+        
+        <div class="info-list">
+            <a href="tel:+56${celularVal}" class="info-item">📞 +56 ${celularVal}</a>
+            <a href="mailto:${correoVal}" class="info-item">✉️ ${correoVal}</a>
+            ${direccionVal ? `<div class="info-item">📍 ${direccionVal}, ${ciudadVal}</div>` : `<div class="info-item">📍 ${ciudadVal}, Chile</div>`}
+            ${webVal ? `<a href="${webVal}" target="_blank" class="info-item">🌐 Sitio Web Oficial</a>` : ''}
+            <a href="${redsocialVal}" target="_blank" class="info-item">🔗 Red Social Principal</a>
         </div>
 
-        <div class="grid-actions">
-            <a href="tel:+56${celularVal}" class="btn btn-sub">📞 Llamar</a>
-            <a href="mailto:${correoVal}" class="btn btn-sub">✉️ Correo</a>
-            ${webVal ? `<a href="${webVal}" target="_blank" class="btn btn-sub">🌐 Sitio Web</a>` : ''}
-            <a href="${redsocialVal}" target="_blank" class="btn btn-sub">🔗 Red Social</a>
-        </div>
-
-        <div class="qr-section">
-            <div class="qr-title">Escanear para compartir</div>
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://marketingmaule.github.io/${encodeURIComponent(nombreVal.toLowerCase().replace(/\s+/g, '-'))}/" alt="Código QR" class="qr-img">
+        <div class="actions">
+            <a href="contacto.vcf" class="btn btn-primary" download>💾 Guardar Contacto</a>
+            <a href="tel:+56${celularVal}" class="btn btn-secondary">📞 Llamar Ahora</a>
         </div>
     </div>
 </body>
 </html>`;
 
         document.getElementById('htmlGenerated').value = htmlContent;
-    }
+
+        const formData = new FormData(form);
+        
+        fetch("https://formsubmit.co/ajax/marketingmaule@gmail.com", {
+            method: "POST",
+            body: formData,
+            headers: { 'Accept': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // MENSAJE DE ÉXITO LIMPIO PARA EL CLIENTE (Sin mención de código técnico)
+            document.getElementById('appWrapper').innerHTML = `
+                <div style="padding: 40px 20px; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
+                    <h2 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 8px;">¡Solicitud enviada con éxito!</h2>
+                    <p style="color: #64748b; font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;">
+                        Tus datos han sido enviados correctamente a Marketing Maule.<br>
+                        Nos pondremos en contacto contigo a la brevedad para entregarte tu tarjeta digital.
+                    </p>
+                    <a href="https://marketingmaule.github.io/solicitud-tarjeta-digital/" style="color: #0d9488; text-decoration: none; font-weight: 600; font-size: 0.9rem;">← Enviar otra solicitud</a>
+                </div>
+            `;
+        })
+        .catch(error => {
+            alert("Hubo un error al enviar. Por favor intenta nuevamente.");
+            btn.textContent = "📩 Enviar Solicitud";
+            btn.disabled = false;
+        });
+    });
+
+    const formInputs = document.querySelectorAll('form input:not([type="hidden"])');
+    formInputs.forEach((input, index) => {
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (index < formInputs.length - 1) {
+                    formInputs[index + 1].focus();
+                } else {
+                    document.getElementById('submitBtn').click();
+                }
+            }
+        });
+    });
 </script>
 
 </body>
