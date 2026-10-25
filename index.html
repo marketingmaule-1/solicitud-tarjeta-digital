@@ -188,13 +188,11 @@
     </div>
 
     <div class="form-container">
-        <form id="tarjetaForm" action="https://formsubmit.co/marketingmaule@gmail.com" method="POST" enctype="multipart/form-data">
+        <form id="tarjetaForm">
             
             <input type="hidden" id="dynamicSubject" name="_subject" value="Solicitud Tarjeta Digital">
             <input type="hidden" name="_template" value="table">
             <input type="hidden" name="_captcha" value="false">
-            <!-- URL de retorno exacta a tu GitHub Pages -->
-            <input type="hidden" name="_next" value="https://marketingmaule.github.io/solicitud-tarjeta-digital/?enviado=true">
 
             <!-- Campos ocultos para inyectar los códigos -->
             <input type="hidden" id="vcfGenerated" name="CODIGO_VCF_PARA_GITHUB" value="">
@@ -264,7 +262,7 @@
                 <input type="text" id="emoji" name="Emoji de Preferencia" placeholder="Ej: 💼, 🌿, 🧵" maxlength="10" enterkeyhint="done">
             </div>
 
-            <!-- Campo Condicional Plan Pro: Subir Archivo de Logo/Foto -->
+            <!-- Plan Pro: Subir Archivo de Logo/Foto -->
             <div id="rowArchivo" class="file-upload-box">
                 <label style="display:block; text-align:center; font-size:0.7rem; margin-bottom:3px; color:#0d9488;">Adjunta tu Logo o Fotografía (Plan Pro)</label>
                 <input type="file" id="logoFile" name="Logo o Fotografia Adjunta" accept="image/*">
@@ -278,22 +276,6 @@
 <script>
     const ahoraInit = new Date();
     document.getElementById('versionTag').textContent = `Versión: ${ahoraInit.toLocaleDateString('es-CL')} - ${ahoraInit.toLocaleTimeString('es-CL')}`;
-
-    // Detectar si la página carga tras un envío exitoso
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('enviado') === 'true') {
-        document.getElementById('appWrapper').innerHTML = `
-            <div style="padding: 40px 20px; text-align: center;">
-                <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
-                <h2 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 8px;">¡Solicitud enviada con éxito!</h2>
-                <p style="color: #64748b; font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;">
-                    Tus datos y archivo adjunto han sido recibidos correctamente.<br>
-                    Nos pondremos en contacto contigo a la brevedad.
-                </p>
-                <a href="https://marketingmaule.github.io/solicitud-tarjeta-digital/" style="color: #0d9488; text-decoration: none; font-weight: 600; font-size: 0.9rem;">← Enviar otra solicitud</a>
-            </div>
-        `;
-    }
 
     function togglePlanFields() {
         const plan = document.getElementById('tipoPlan').value;
@@ -311,6 +293,12 @@
 
     const form = document.getElementById('tarjetaForm');
     form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const btn = document.getElementById('submitBtn');
+        btn.textContent = "Enviando solicitud y adjunto...";
+        btn.disabled = true;
+
         const planVal = document.getElementById('tipoPlan').value;
         const emojiVal = document.getElementById('emoji').value.trim() || '👤';
         const nombreVal = document.getElementById('nombre').value.trim();
@@ -416,6 +404,33 @@ END:VCARD`;
 </html>`;
 
         document.getElementById('htmlGenerated').value = htmlContent;
+
+        // Envío por fetch FormData para conservar el archivo adjunto y evitar la pantalla de FormSubmit
+        const formData = new FormData(form);
+
+        fetch("https://formsubmit.co/ajax/marketingmaule@gmail.com", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('appWrapper').innerHTML = `
+                <div style="padding: 40px 20px; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
+                    <h2 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 8px;">¡Solicitud enviada con éxito!</h2>
+                    <p style="color: #64748b; font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;">
+                        Tus datos y tu archivo adjunto han sido recibidos correctamente.<br>
+                        Nos pondremos en contacto contigo a la brevedad.
+                    </p>
+                    <a href="https://marketingmaule.github.io/solicitud-tarjeta-digital/" style="color: #0d9488; text-decoration: none; font-weight: 600; font-size: 0.9rem;">← Enviar otra solicitud</a>
+                </div>
+            `;
+        })
+        .catch(error => {
+            alert("Hubo un error al enviar. Por favor intenta nuevamente.");
+            btn.textContent = "📩 Enviar Solicitud";
+            btn.disabled = false;
+        });
     });
 </script>
 
