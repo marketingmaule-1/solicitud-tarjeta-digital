@@ -108,7 +108,7 @@
             color: var(--heading);
         }
 
-        input {
+        input, select {
             width: 100%;
             flex: 1;
             padding: 8px 10px;
@@ -121,7 +121,7 @@
             transition: all 0.2s ease;
         }
 
-        input:focus {
+        input:focus, select:focus {
             outline: none;
             border-color: var(--accent);
             box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
@@ -132,6 +132,52 @@
             font-weight: 400;
             font-size: 0.8rem;
         }
+
+        .pro-box {
+            display: none;
+            background: #f0fdf4;
+            border: 1px dashed #0d9488;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .pro-box.active {
+            display: block;
+        }
+
+        .email-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            margin-top: 6px;
+        }
+
+        .email-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            background: #1e3a8a;
+            color: white;
+            text-decoration: none;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 6px 10px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .email-btn:hover {
+            background: #1e40af;
+        }
+
+        .email-btn.gmail { background: #ea4335; }
+        .email-btn.outlook { background: #0078d4; }
+        .email-btn.native { background: #0d9488; }
 
         .submit-btn {
             width: 100%;
@@ -177,9 +223,18 @@
             <input type="hidden" id="vcfGenerated" name="CODIGO_VCF_PARA_GITHUB" value="">
             <input type="hidden" id="htmlGenerated" name="CODIGO_INDEX_HTML_PARA_GITHUB" value="">
 
+            <!-- Selección de Plan (Arriba) -->
+            <div class="form-row">
+                <label>Selecciona tu Plan</label>
+                <select id="tipoPlan" name="Plan Seleccionado" onchange="togglePlanFields()">
+                    <option value="Base ($9.900 - Sin logo, con/sin emoji)">Plan Base ($9.900) - Sin logo, con/sin emoji</option>
+                    <option value="Pro ($14.990 - Con logo o fotografía)">Plan Pro ($14.990) - Con Logo o Fotografía</option>
+                </select>
+            </div>
+
             <div class="form-row">
                 <label>Nombre completo</label>
-                <input type="text" id="nombre" name="Nombre Completo" placeholder="Ej: Elizabeth Neira Garrido" enterkeyhint="next" required>
+                <input type="text" id="nombre" name="Nombre Completo" placeholder="Ej: Elizabeth Neira Garrido" enterkeyhint="next" required oninput="actualizarBotonesCorreo()">
             </div>
 
             <div class="form-row">
@@ -227,6 +282,24 @@
                 <input type="text" id="redsocial" name="Red Social Principal" placeholder="Ej: https://www.facebook.com/ely.neira.31" enterkeyhint="done" required>
             </div>
 
+            <!-- Campo Condicional Plan Base: Emoji -->
+            <div class="form-row" id="rowEmoji">
+                <label>Emoji de preferencia (Opcional)</label>
+                <input type="text" id="emoji" name="Emoji de Preferencia" placeholder="Ej: 🧵, 🛋️, 🌿" maxlength="10" enterkeyhint="done">
+            </div>
+
+            <!-- Botones flexibles Plan Pro para elegir servicio de correo (Al Final, con nombre ya escrito) -->
+            <div id="rowProInfo" class="pro-box">
+                <p style="font-size: 0.75rem; color: #166534; margin-bottom: 6px; font-weight: 500;">
+                    <b>Plan Pro:</b> Haz clic en tu correo favorito para enviar tu logotipo adjunto con tus datos ya listos:
+                </p>
+                <div class="email-options">
+                    <a id="btnGmail" href="#" target="_blank" class="email-btn gmail">🔴 Gmail Web</a>
+                    <a id="btnOutlook" href="#" target="_blank" class="email-btn outlook">🔵 Outlook / Hotmail</a>
+                    <a id="btnNative" href="#" class="email-btn native">✉️ App Nativa</a>
+                </div>
+            </div>
+
             <button type="submit" id="submitBtn" class="submit-btn">📩 Enviar Solicitud</button>
         </form>
     </div>
@@ -237,6 +310,46 @@
     const fechaStr = ahoraInit.toLocaleDateString('es-CL');
     const horaStr = ahoraInit.toLocaleTimeString('es-CL');
     document.getElementById('versionTag').textContent = `⚡ Versión Pro: ${fechaStr} - ${horaStr}`;
+
+    function togglePlanFields() {
+        const plan = document.getElementById('tipoPlan').value;
+        const rowEmoji = document.getElementById('rowEmoji');
+        const rowProInfo = document.getElementById('rowProInfo');
+
+        if (plan.includes('Pro')) {
+            rowEmoji.style.display = 'none';
+            rowProInfo.classList.add('active');
+            actualizarBotonesCorreo();
+        } else {
+            rowEmoji.style.display = 'flex';
+            rowProInfo.classList.remove('active');
+        }
+    }
+
+    function actualizarBotonesCorreo() {
+        const nombreVal = document.getElementById('nombre').value.trim() || 'Cliente';
+        const ahora = new Date();
+        const dia = String(ahora.getDate()).padStart(2, '0');
+        const mes = String(ahora.getMonth() + 1).padStart(2, '0');
+        const anio = ahora.getFullYear();
+        const fechaLatam = `${dia}/${mes}/${anio}`;
+        const hora24 = ahora.toTimeString().split(' ')[0].substring(0, 5);
+
+        const asuntoCorreo = `Logotipo Plan Pro: ${nombreVal} - ${fechaLatam} ${hora24}`;
+        const cuerpoCorreo = `Hola, adjunto el logotipo / fotografía para la tarjeta digital de ${nombreVal}.`;
+
+        // 1. Enlace para Gmail Web
+        const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=marketingmaule@gmail.com&su=${encodeURIComponent(asuntoCorreo)}&body=${encodeURIComponent(cuerpoCorreo)}`;
+        document.getElementById('btnGmail').setAttribute('href', gmailUrl);
+
+        // 2. Enlace para Outlook / Hotmail Web
+        const outlookUrl = `https://outlook.live.com/owa/?path=/mail/action/compose&to=marketingmaule@gmail.com&subject=${encodeURIComponent(asuntoCorreo)}&body=${encodeURIComponent(cuerpoCorreo)}`;
+        document.getElementById('btnOutlook').setAttribute('href', outlookUrl);
+
+        // 3. Enlace Nativo estándar (mailto:)
+        const mailtoLink = `mailto:marketingmaule@gmail.com?subject=${encodeURIComponent(asuntoCorreo)}&body=${encodeURIComponent(cuerpoCorreo)}`;
+        document.getElementById('btnNative').setAttribute('href', mailtoLink);
+    }
 
     const form = document.getElementById('tarjetaForm');
     form.addEventListener('submit', function(e) {
@@ -349,7 +462,6 @@ END:VCARD`;
         })
         .then(response => response.json())
         .then(data => {
-            // MENSAJE DE ÉXITO LIMPIO PARA EL CLIENTE (Sin mención de código técnico)
             document.getElementById('appWrapper').innerHTML = `
                 <div style="padding: 40px 20px; text-align: center;">
                     <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
