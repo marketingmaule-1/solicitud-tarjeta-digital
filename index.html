@@ -296,7 +296,7 @@
         e.preventDefault();
 
         const btn = document.getElementById('submitBtn');
-        btn.textContent = "Enviando solicitud y adjunto...";
+        btn.textContent = "Enviando solicitud...";
         btn.disabled = true;
 
         const planVal = document.getElementById('tipoPlan').value;
@@ -316,7 +316,8 @@
         const fechaIso = ahora.toISOString().split('T')[0];
         const horaMin = ahora.toTimeString().split(' ')[0].substring(0,5);
         
-        document.getElementById('dynamicSubject').value = `Solicitud (${planVal.split(' ')[0]}): ${nombreVal} - ${fechaIso}`;
+        // Asunto con fecha y hora exactas para distinguir solicitudes del mismo día
+        document.getElementById('dynamicSubject').value = `Solicitud (${planVal.split(' ')[0]}): ${nombreVal} - ${fechaIso} ${horaMin}`;
 
         // VCF Completo
         const vcfContent = 
@@ -405,7 +406,6 @@ END:VCARD`;
 
         document.getElementById('htmlGenerated').value = htmlContent;
 
-        // Envío por fetch FormData para conservar el archivo adjunto y evitar la pantalla de FormSubmit
         const formData = new FormData(form);
 
         fetch("https://formsubmit.co/ajax/marketingmaule@gmail.com", {
@@ -419,7 +419,7 @@ END:VCARD`;
                     <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
                     <h2 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 8px;">¡Solicitud enviada con éxito!</h2>
                     <p style="color: #64748b; font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px;">
-                        Tus datos y tu archivo adjunto han sido recibidos correctamente.<br>
+                        Tus datos y archivo adjunto han sido recibidos correctamente.<br>
                         Nos pondremos en contacto contigo a la brevedad.
                     </p>
                     <a href="https://marketingmaule.github.io/solicitud-tarjeta-digital/" style="color: #0d9488; text-decoration: none; font-weight: 600; font-size: 0.9rem;">← Enviar otra solicitud</a>
